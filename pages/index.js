@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Typography } from '@supabase/ui'
+import { Toaster } from 'react-hot-toast'
 
 import Editor from '../components/Editor/Editor'
 import TemplatesPanel from '../components/TemplatesPanel/TemplatesPanel'
@@ -58,6 +59,20 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
       </Head>
+
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          className:
+            'dark:bg-bg-primary-dark dark:text-typography-body-strong-dark border border-gray-500',
+          style: {
+            padding: '8px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            fontSize: '0.875rem',
+          },
+        }}
+      />
 
       {/* Header */}
       <div className="w-full py-4 border-b border-gray-600">

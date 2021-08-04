@@ -1,6 +1,7 @@
 import { Button, Dropdown, Input } from '@supabase/ui'
 import * as R from 'ramda'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 const TextFillColour = ({
   swatches = [],
@@ -27,7 +28,7 @@ const TextFillColour = ({
 
     const re = /[0-9A-Fa-f]{6}/g
     if (!re.test(hexColour)) {
-      return console.log('Not a valid hex')
+      return toast.error('Please enter a valid hex value')
     }
 
     // Can be refactored to be nicer
