@@ -10,7 +10,7 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
   const [loading, setLoading] = useState(false)
 
   const [loadAnimations, setLoadAnimations] = useState(false)
-  
+
   useEffect(() => {
     if (visible) {
       setEmail('')
@@ -30,8 +30,9 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
   }
 
   const validateEmail = (email) => {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(email).toLowerCase())
   }
 
   const onSignIn = async (event) => {
@@ -50,7 +51,8 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
     }
 
     setLoading(true)
-    const { user, error } = view === 'SIGN_IN' ? await signIn(email, password) : await signUp(email, password)
+    const { user, error } =
+      view === 'SIGN_IN' ? await signIn(email, password) : await signUp(email, password)
     setLoading(false)
     if (error) {
       toast.error(error.message)
@@ -77,22 +79,43 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
               <Typography.Text>Signing in gives you access to features such as:</Typography.Text>
             </p>
             <ul className="list-disc text-white pl-6">
-              <li><Typography.Text><span className="mr-3">💾</span>Saving and publishing your memes</Typography.Text></li>
-              <li><Typography.Text><span className="mr-3">💕</span>Access to our meme community</Typography.Text></li>
-              <li><Typography.Text><span className="mr-3">🏆</span>Fight for the "Meme of the month" title!</Typography.Text></li>
+              <li>
+                <Typography.Text>
+                  <span className="mr-3">💾</span>Saving and publishing your memes
+                </Typography.Text>
+              </li>
+              <li>
+                <Typography.Text>
+                  <span className="mr-3">💕</span>Access to our meme community
+                </Typography.Text>
+              </li>
+              <li>
+                <Typography.Text>
+                  <span className="mr-3">🏆</span>Fight for the "Meme of the month" title!
+                </Typography.Text>
+              </li>
             </ul>
           </div>
-          <div className={`absolute left-2 transition-all delay-300 ${loadAnimations ? 'opacity-100 -bottom-2' : 'opacity-0 -bottom-4'}`} style={{ transform: 'scaleX(-1)'}}>
-            <img
-              className={`rounded-md h-20 animate-bounce`}
-              src="/img/knuckles.png"
-            />
+          <div
+            className={`absolute left-2 transition-all delay-300 ${
+              loadAnimations ? 'opacity-100 -bottom-2' : 'opacity-0 -bottom-4'
+            }`}
+            style={{ transform: 'scaleX(-1)' }}
+          >
+            <img className={`rounded-md h-20 animate-bounce`} src="/img/knuckles.png" />
           </div>
-          <img className={`absolute rounded-md h-28 transition-all -left-10 ${loadAnimations ? 'opacity-100 -bottom-12' : 'opacity-0 -bottom-14'}`} src="/img/me-and-the-boys.png" />
           <img
-            className={`absolute rounded-t-md h-32 transition-all delay-200 left-52 ${loadAnimations ? 'opacity-100 -bottom-10' : 'opacity-0 -bottom-12'}`}
+            className={`absolute rounded-md h-28 transition-all -left-10 ${
+              loadAnimations ? 'opacity-100 -bottom-12' : 'opacity-0 -bottom-14'
+            }`}
+            src="/img/me-and-the-boys.png"
+          />
+          <img
+            className={`absolute rounded-t-md h-32 transition-all delay-200 left-52 ${
+              loadAnimations ? 'opacity-100 -bottom-10' : 'opacity-0 -bottom-12'
+            }`}
             src="/img/popcat.gif"
-            style={{ transform: 'scaleX(-1)'}}
+            style={{ transform: 'scaleX(-1)' }}
           />
         </div>
         <div className="flex-1 space-y-4">

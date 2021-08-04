@@ -5,7 +5,15 @@ import { Button, Typography } from '@supabase/ui'
 import Editor from '../components/Editor/Editor'
 import LogInModal from '../components/LogInModal/LogInModal'
 import TemplatesPanel from '../components/TemplatesPanel/TemplatesPanel'
-import { getSession, getUser, uploadFile, getSignedUrl, getStickers, getTemplates, signOut } from '../utils/supabaseClient'
+import {
+  getSession,
+  getUser,
+  uploadFile,
+  getSignedUrl,
+  getStickers,
+  getTemplates,
+  signOut,
+} from '../utils/supabaseClient'
 import toast from 'react-hot-toast'
 
 const TEMPLATES_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_TEMPLATES_BUCKET
@@ -34,7 +42,7 @@ export default function Home() {
 
     const session = getSession()
     if (session) {
-      const sessionExpired = session.expires_at <= Math.floor(Date.now()/1000)
+      const sessionExpired = session.expires_at <= Math.floor(Date.now() / 1000)
       if (sessionExpired) {
         toast('Your session is expired, please log in again')
         return localStorage.removeItem('supabase.auth.token')

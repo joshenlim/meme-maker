@@ -9,24 +9,26 @@ function MyApp({ Component, pageProps }) {
     document.body.className = 'dark'
   }, [])
 
-  return <>
-    <Component {...pageProps} />
-    <Portal.Root className="portal--toast">
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          className:
-            'dark:bg-bg-primary-dark dark:text-typography-body-strong-dark border border-gray-500',
-          style: {
-            padding: '8px',
-            paddingLeft: '16px',
-            paddingRight: '16px',
-            fontSize: '0.875rem',
-          },
-        }}
-      />
-    </Portal.Root>
-  </>
+  return (
+    <>
+      <Component {...pageProps} />
+      <Portal.Root className="portal--toast">
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            className:
+              'dark:bg-bg-primary-dark dark:text-typography-body-strong-dark border border-gray-500',
+            style: {
+              padding: '8px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
+              fontSize: '0.875rem',
+            },
+          }}
+        />
+      </Portal.Root>
+    </>
+  )
 }
 
 export default MyApp
