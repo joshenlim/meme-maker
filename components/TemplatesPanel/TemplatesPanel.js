@@ -39,6 +39,7 @@ const TemplatesPanel = ({
             {R.map(
               (template) => (
                 <div
+                  key={template.name}
                   className="h-32 bg-center bg-no-repeat bg-cover rounded-md cursor-pointer"
                   style={{ backgroundImage: `url('${template.url}')` }}
                   onClick={() => loadTemplate(template)}

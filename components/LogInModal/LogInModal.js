@@ -57,7 +57,6 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
     if (error) {
       toast.error(error.message)
     } else {
-      toast.success(`Successfully logged in! 😄`)
       onLoginSuccess(user)
     }
   }
@@ -81,7 +80,7 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
             <ul className="list-disc text-white pl-6">
               <li>
                 <Typography.Text>
-                  <span className="mr-3">💾</span>Saving and publishing your memes
+                  <span className="mr-3">💾</span>Claiming, saving, and publishing your memes
                 </Typography.Text>
               </li>
               <li>

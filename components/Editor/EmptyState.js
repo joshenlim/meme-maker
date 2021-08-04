@@ -29,7 +29,7 @@ const EmptyState = ({
           <Button type="secondary" onClick={onSelectUpload}>
             Upload your own image
           </Button>
-          <div className="border-b border-gray-600 w-32" />
+          <div className="border-b border-gray-600 w-48" />
           <Button type="primary" onClick={onSelectChangeTemplate}>
             Select a template
           </Button>

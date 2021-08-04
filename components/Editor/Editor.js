@@ -1,5 +1,14 @@
 import { fabric } from 'fabric'
-import { Input, Button, IconType, IconLoader, Typography } from '@supabase/ui'
+import {
+  Input,
+  Button,
+  IconType,
+  Dropdown,
+  IconChevronDown,
+  IconSave,
+  IconImage,
+  IconArchive,
+} from '@supabase/ui'
 import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
@@ -15,10 +24,13 @@ import {
   TextFillColour,
   TextStrokeColour,
 } from '../EditorControls'
+import toast from 'react-hot-toast'
 
 const EDITOR_DIMENSIONS = { width: 800, height: 450 }
 
 const Editor = ({
+  user,
+  isAdmin = false,
   stickers = [],
   selectedTemplate = null,
   uploadedFileUrl = '',
@@ -236,15 +248,22 @@ const Editor = ({
 
   /* Misc methods */
 
-  const onSaveTemplate = async () => {
+  const onSaveDefaultTemplate = async () => {
     const canvasJson = getCanvasJson(editorRef.current)
     if (!name) {
-      return console.warn('You need a name for your template')
+      return toast.error('You need a name for your template')
     }
     if (canvasJson.objects.length === 0) {
-      return console.warn('There are no objects on your canvas')
+      return toast.error('There are no objects on your canvas')
     }
     await saveTemplate(name, canvasJson)
+  }
+
+  const onSaveTemplate = async () => {
+    if (!user) {
+      return toast('Log in to save your memes!', { icon: '🔒' })
+    }
+    return toast('Pending')
   }
 
   const onExportCanvas = () => {
@@ -330,14 +349,35 @@ const Editor = ({
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
-          <div className="flex items-center space-x-4">
-            <Button type="primary" onClick={onSaveTemplate}>
-              Save template
+          <Dropdown
+            align="end"
+            overlay={[
+              ...(isAdmin
+                ? [
+                    <Dropdown.Item
+                      key="save-default-template"
+                      icon={<IconArchive />}
+                      onClick={onSaveDefaultTemplate}
+                    >
+                      Save as default template
+                    </Dropdown.Item>,
+                  ]
+                : []),
+              <Dropdown.Item key="save-template" icon={<IconSave />} onClick={onSaveTemplate}>
+                Save as template
+              </Dropdown.Item>,
+              <Dropdown.Item key="export" icon={<IconImage />} onClick={onExportCanvas}>
+                Export as PNG
+              </Dropdown.Item>,
+            ]}
+          >
+            <Button
+              type="primary"
+              iconRight={<IconChevronDown className="text-white" strokeWidth={2} />}
+            >
+              Save your meme
             </Button>
-            <Button type="primary" onClick={onExportCanvas}>
-              Export meme
-            </Button>
-          </div>
+          </Dropdown>
         </div>
       )}
     </div>
