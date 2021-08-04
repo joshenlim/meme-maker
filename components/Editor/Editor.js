@@ -16,10 +16,13 @@ const Editor = ({
 }) => {
 
   const editorRef = useRef(null)
+  const copiedObject = useRef(null)
+
   const [name, setName] = useState('')
   const [selectedObject, setSelectedObject] = useState(null)
-
   const isTextObjectSelected = R.hasPath(['fontSize'], selectedObject);
+
+  const [undoTransactions, setUndoTransactions] = useState([])
 
   useEffect(() => {
     const editor = new fabric.Canvas('editor', {
@@ -71,6 +74,31 @@ const Editor = ({
           // Remove object
           editorRef.current.remove(activeObject)
           break
+        }
+        case 67: {
+          if (event.metaKey) {
+            copiedObject.current = activeObject
+          }
+          break;
+        }
+      }
+    }
+
+    if (targetType !== 'INPUT') {
+      switch(keyCode) {
+        case 86: {
+          if (event.metaKey && copiedObject.current) {
+            const clonedObject = fabric.util.object.clone(copiedObject.current)
+            clonedObject.set({ top: clonedObject.top + 10, left: clonedObject.left + 10 })
+            editorRef.current.add(clonedObject)
+          }
+          break;
+        }
+        case 90: {
+          if (event.metaKey) {
+            console.log('Undo')
+          }
+          break;
         }
       }
     }
