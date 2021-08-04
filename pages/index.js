@@ -1,82 +1,95 @@
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { Typography } from '@supabase/ui'
+
+import Editor from '../components/Editor/Editor'
+import TemplatesPanel from '../components/TemplatesPanel/TemplatesPanel'
+import { uploadFile, getSignedUrl, getStickers, getTemplates } from '../utils/supabaseClient'
+
+const TEMPLATES_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_TEMPLATES_BUCKET
 
 export default function Home() {
+  
+  const [templates, setTemplates] = useState([])
+  const [stickers, setStickers] = useState([])
+
+  const [uploading, setUploading] = useState(false)
+  const [uploadedFileUrl, setUploadedFileUrl] = useState('')
+  const [showTemplatesPanel, setShowTemplatesPanel] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState(null)
+
+  useEffect(() => {
+    const initAssets = async() => {
+      const stickers = await getStickers()
+      setStickers(stickers)
+      
+      const templates = await getTemplates()
+      setTemplates(templates)
+    }
+    initAssets()
+  }, [])
+
+  const onSelectChangeTemplate = () => {
+    setShowTemplatesPanel(true)
+  }
+
+  const onFilesUpload = async (event) => {
+    setUploading(true)
+    event.persist()
+    const files = event.target.files
+    const key = await uploadFile(files[0])
+    const formattedKey = key.split('/').slice(1).join('/')
+    const url = await getSignedUrl(TEMPLATES_BUCKET, formattedKey)
+    setUploadedFileUrl(url)
+    setUploading(false)
+    setShowTemplatesPanel(false)
+    event.target.value = ''
+  }
+
+  const loadTemplate = (template) => {
+    setSelectedTemplate(template)
+    setShowTemplatesPanel(false)
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="relative h-screen bg-gray-800">
       <Head>
-        <title>Create Next App</title>
+        <title>Meme Maker | Supabase</title>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      {/* Header */}
+      <div className="w-full py-4 border-b border-gray-600">
+        <div className="max-w-screen-xl flex items-center justify-between mx-auto">
+          <img className="h-5 w-auto" src="/img/supabase-dark.svg" alt="" />
         </div>
-      </main>
+      </div>
 
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
+      <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
+        <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
+          <div className="flex flex-col py-8 space-y-2">
+            <Typography.Title level={2}>Ye Ol' Meme Machine</Typography.Title>
+            <Typography>Here at Supabase we love memes - and so here's a meme maker 💚</Typography>
+          </div>
+          <Editor
+            stickers={stickers}
+            templates={templates}
+            selectedTemplate={selectedTemplate}
+            uploadedFileUrl={uploadedFileUrl}
+            onSelectChangeTemplate={onSelectChangeTemplate}
+          />
+        </main>
+      </div>
+
+      <TemplatesPanel
+        templates={templates}
+        uploading={uploading}
+        showTemplatesPanel={showTemplatesPanel}
+        loadTemplate={loadTemplate}
+        onFilesUpload={onFilesUpload}
+        hideTemplatesPanel={() => setShowTemplatesPanel(false)}
+      />
     </div>
   )
 }
