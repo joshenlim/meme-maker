@@ -3,9 +3,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prettier": "prettier --write \"./{pages,components,lib,stores,styles,tests}/**/*.{md,js,jsx,json}\""
   },
   "dependencies": {
+    "@radix-ui/react-portal": "^0.0.14",
     "@supabase/supabase-js": "^1.21.0",
     "@supabase/ui": "^0.31.0",
     "fabric": "^4.5.1",
@@ -19,6 +21,7 @@
   "devDependencies": {
     "autoprefixer": "^10.2.6",
     "postcss": "^8.3.5",
+    "prettier": "^2.3.2",
     "tailwindcss": "^2.2.4"
   }
 }

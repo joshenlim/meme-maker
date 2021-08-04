@@ -1,10 +1,7 @@
-import { IconPlus, IconMinus, Input } from "@supabase/ui"
+import { IconPlus, IconMinus, Input } from '@supabase/ui'
 import * as R from 'ramda'
 
-const FontSize = ({
-  selectedObject = {},
-  updateTextAttribute = () => {}
-}) => {
+const FontSize = ({ selectedObject = {}, updateTextAttribute = () => {} }) => {
   return (
     <div className="flex items-center">
       <div

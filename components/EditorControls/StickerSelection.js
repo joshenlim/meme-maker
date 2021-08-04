@@ -1,19 +1,21 @@
 import { Button, Dropdown, Typography } from '@supabase/ui'
 import * as R from 'ramda'
 
-const StickerSelection = ({
-  stickers = [],
-  onAddSticker = () => {},
-}) => {
+const StickerSelection = ({ stickers = [], onAddSticker = () => {} }) => {
   return (
     <Dropdown
-      overlay={R.map((sticker) => (
-        <Dropdown.Item key={sticker.id} onClick={() => onAddSticker(sticker)}>
-          <div className="flex items-center">
-            <Typography.Text>{sticker.name}</Typography.Text>
-          </div>
-        </Dropdown.Item>
-      ), stickers)}
+      className="max-h-[180px] !overflow-y-auto"
+      overlay={R.map(
+        (sticker) => (
+          <Dropdown.Item key={sticker.id} onClick={() => onAddSticker(sticker)}>
+            <div className="flex items-center space-x-4">
+              <img className="w-6" src={sticker.url} />
+              <Typography.Text>{sticker.name}</Typography.Text>
+            </div>
+          </Dropdown.Item>
+        ),
+        stickers
+      )}
     >
       <div className="h-10 flex">
         <Button type="text">

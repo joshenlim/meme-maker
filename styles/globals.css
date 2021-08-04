@@ -22,3 +22,12 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.sbui-modal--large {
+  width: 850px !important;
+  max-width: 850px !important;
+}
+
+div[data-radix-portal]:not(.portal--toast) {
+  z-index: 2147483646 !important;
+}

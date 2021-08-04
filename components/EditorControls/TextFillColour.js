@@ -3,12 +3,7 @@ import * as R from 'ramda'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-const TextFillColour = ({
-  swatches = [],
-  selectedObject = {},
-  updateTextAttribute = () => {},
-}) => {
-
+const TextFillColour = ({ swatches = [], selectedObject = {}, updateTextAttribute = () => {} }) => {
   const textColour = R.pathOr('#FFFFFF', ['fill'], selectedObject)
   const [hexColour, setHexColour] = useState(textColour)
 
@@ -41,21 +36,28 @@ const TextFillColour = ({
       overlay={[
         <Dropdown.Misc>
           <div key="fill-swatches" className="flex items-center space-x-2">
-            {R.map((swatch) => (
-              <div
-                key={swatch}
-                className="w-6 h-6 rounded-full border-2 border-gray-100 shadow cursor-pointer"
-                onClick={() => updateTextAttribute({ fill: swatch })}
-                style={{ backgroundColor: swatch }}
-              />
-            ), swatches)}
+            {R.map(
+              (swatch) => (
+                <div
+                  key={swatch}
+                  className="w-6 h-6 rounded-full border-2 border-gray-100 shadow cursor-pointer"
+                  onClick={() => updateTextAttribute({ fill: swatch })}
+                  style={{ backgroundColor: swatch }}
+                />
+              ),
+              swatches
+            )}
           </div>
         </Dropdown.Misc>,
         <Dropdown.Misc>
           <form onSubmit={updateTextHexColour}>
-            <Input placeholder="#FFFFFF" value={hexColour} onChange={(event) => setHexColour(event.target.value)} />
+            <Input
+              placeholder="#FFFFFF"
+              value={hexColour}
+              onChange={(event) => setHexColour(event.target.value)}
+            />
           </form>
-        </Dropdown.Misc>
+        </Dropdown.Misc>,
       ]}
     >
       <div className="formatButton h-10 flex">
@@ -67,7 +69,7 @@ const TextFillColour = ({
               style={{
                 height: '2px',
                 backgroundColor: R.pathOr('#000000', ['fill'], selectedObject),
-                marginTop: '1px'
+                marginTop: '1px',
               }}
             />
           </div>

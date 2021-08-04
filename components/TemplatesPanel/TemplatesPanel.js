@@ -5,12 +5,11 @@ import * as R from 'ramda'
 const TemplatesPanel = ({
   templates = [],
   uploading = false,
-  showTemplatesPanel = false,
+  visible = false,
   loadTemplate = () => {},
   onFilesUpload = () => {},
   hideTemplatesPanel = () => {},
 }) => {
-
   const uploadButtonRef = useRef(null)
 
   const onSelectUpload = () => {
@@ -24,7 +23,7 @@ const TemplatesPanel = ({
       hideFooter
       title="Select a template"
       description="Choose from our list of templates or upload your own!"
-      visible={showTemplatesPanel}
+      visible={visible}
       onCancel={hideTemplatesPanel}
     >
       <div className="flex flex-col h-full">
@@ -35,22 +34,23 @@ const TemplatesPanel = ({
           {!uploading ? 'Upload your own template' : 'Uploading template'}
         </Button>
 
-        <div className="mt-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 190px)'}}>
+        <div className="mt-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 190px)' }}>
           <div className="grid grid-cols-3 gap-3">
-            {R.map(template => (
-              <div
-                className='h-32 bg-center bg-no-repeat bg-cover rounded-md cursor-pointer'
-                style={{ backgroundImage: `url('${template.url}')`}}
-                onClick={() => loadTemplate(template)}
-              />
-            ), templates)}
+            {R.map(
+              (template) => (
+                <div
+                  className="h-32 bg-center bg-no-repeat bg-cover rounded-md cursor-pointer"
+                  style={{ backgroundImage: `url('${template.url}')` }}
+                  onClick={() => loadTemplate(template)}
+                />
+              ),
+              templates
+            )}
           </div>
         </div>
 
         {/* Probably add some search or something */}
-
       </div>
-
     </SidePanel>
   )
 }

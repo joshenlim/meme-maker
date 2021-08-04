@@ -6,9 +6,8 @@ import { toast } from 'react-hot-toast'
 const TextStrokeColour = ({
   swatches = [],
   selectedObject = {},
-  updateTextAttribute = () => {}
+  updateTextAttribute = () => {},
 }) => {
-
   const textColour = R.pathOr('#FFFFFF', ['stroke'], selectedObject)
   const [hexColour, setHexColour] = useState(textColour)
 
@@ -40,21 +39,28 @@ const TextStrokeColour = ({
       overlay={[
         <Dropdown.Misc>
           <div key="stroke-swatches" className="flex items-center space-x-2">
-            {R.map((swatch) => (
-              <div
-                key={swatch}
-                className="w-6 h-6 rounded-full border-2 border-gray-100 shadow cursor-pointer"
-                style={{ backgroundColor: swatch }}
-                onClick={() => updateTextAttribute({ stroke: swatch })}
-              />
-            ), swatches)}
+            {R.map(
+              (swatch) => (
+                <div
+                  key={swatch}
+                  className="w-6 h-6 rounded-full border-2 border-gray-100 shadow cursor-pointer"
+                  style={{ backgroundColor: swatch }}
+                  onClick={() => updateTextAttribute({ stroke: swatch })}
+                />
+              ),
+              swatches
+            )}
           </div>
         </Dropdown.Misc>,
         <Dropdown.Misc>
           <form onSubmit={updateTextHexColour}>
-            <Input placeholder="#FFFFFF" value={hexColour} onChange={(event) => setHexColour(event.target.value)} />
+            <Input
+              placeholder="#FFFFFF"
+              value={hexColour}
+              onChange={(event) => setHexColour(event.target.value)}
+            />
           </form>
-        </Dropdown.Misc>
+        </Dropdown.Misc>,
       ]}
     >
       <div className="formatButton h-10 flex">
@@ -64,7 +70,7 @@ const TextStrokeColour = ({
               className="text-[20px] text-gray-200"
               style={{
                 WebkitTextStrokeColor: R.pathOr('#FFFFFF', ['stroke'], selectedObject),
-                WebkitTextStrokeWidth: 1
+                WebkitTextStrokeWidth: 1,
               }}
             >
               A

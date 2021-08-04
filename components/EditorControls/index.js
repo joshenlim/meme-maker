@@ -5,11 +5,4 @@ import TextAlign from './TextAlign'
 import TextFillColour from './TextFillColour'
 import TextStrokeColour from './TextStrokeColour'
 
-export {
-  FontSize,
-  FontFamily,
-  StickerSelection,
-  TextAlign,
-  TextFillColour,
-  TextStrokeColour
-}
+export { FontSize, FontFamily, StickerSelection, TextAlign, TextFillColour, TextStrokeColour }

@@ -1,12 +1,20 @@
 import { fabric } from 'fabric'
-import { Input, Button, IconType } from '@supabase/ui'
+import { Input, Button, IconType, IconLoader, Typography } from '@supabase/ui'
 import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
 import { resizeImageToCanvas, getCanvasJson } from '../../utils/editor'
 import { getSignedUrl, saveTemplate } from '../../utils/supabaseClient'
 
-import { FontSize, FontFamily, StickerSelection, TextAlign, TextFillColour, TextStrokeColour } from '../EditorControls'
+import EmptyState from './EmptyState'
+import {
+  FontSize,
+  FontFamily,
+  StickerSelection,
+  TextAlign,
+  TextFillColour,
+  TextStrokeColour,
+} from '../EditorControls'
 
 const EDITOR_DIMENSIONS = { width: 800, height: 450 }
 
@@ -14,23 +22,25 @@ const Editor = ({
   stickers = [],
   selectedTemplate = null,
   uploadedFileUrl = '',
-  onSelectChangeTemplate = () => {}
+  uploading = false,
+  onFilesUpload = () => {},
+  onSelectChangeTemplate = () => {},
 }) => {
-
   const editorRef = useRef(null)
   const copiedObject = useRef(null)
 
   const [name, setName] = useState('')
   const [selectedObject, setSelectedObject] = useState(null)
-  const isTextObjectSelected = R.hasPath(['fontSize'], selectedObject);
+  const isCanvasEmpty = !(selectedTemplate || uploadedFileUrl)
+  const isTextObjectSelected = R.hasPath(['fontSize'], selectedObject)
 
   // TODO
   const [undoTransactions, setUndoTransactions] = useState([])
 
   useEffect(() => {
     const editor = new fabric.Canvas('editor', {
-      preserveObjectStacking: true
-    });
+      preserveObjectStacking: true,
+    })
 
     window.addEventListener('keydown', handleKeyPress)
     editor.on('selection:created', onSelectionCreated)
@@ -41,7 +51,7 @@ const Editor = ({
     editorRef.current = editor
     return () => {
       window.removeEventListener('keydown', handleKeyPress)
-      editorRef.current.__eventListeners = {};
+      editorRef.current.__eventListeners = {}
     }
   }, [])
 
@@ -56,7 +66,7 @@ const Editor = ({
       editorRef.current.remove(...editorRef.current.getObjects())
       editorRef.current.loadFromJSON(selectedTemplate.json, () => {
         const objects = editorRef.current.getObjects()
-        const [backgroundObject] = objects.filter(object => object.isBackground)
+        const [backgroundObject] = objects.filter((object) => object.isBackground)
         backgroundObject.set({ selectable: false, evented: false })
         editorRef.current.setWidth(backgroundObject.width * backgroundObject.scaleX)
         editorRef.current.setHeight(backgroundObject.height * backgroundObject.scaleY)
@@ -70,9 +80,9 @@ const Editor = ({
     const { keyCode } = event
     const activeObject = editorRef.current.getActiveObject()
     const targetType = event.target.tagName.toUpperCase()
-    
+
     if (activeObject && !activeObject.isEditing && targetType !== 'INPUT') {
-      switch(keyCode) {
+      switch (keyCode) {
         case 8: {
           // Remove object
           editorRef.current.remove(activeObject)
@@ -82,26 +92,26 @@ const Editor = ({
           if (event.metaKey) {
             copiedObject.current = activeObject
           }
-          break;
+          break
         }
       }
     }
 
     if (targetType !== 'INPUT') {
-      switch(keyCode) {
+      switch (keyCode) {
         case 86: {
           if (event.metaKey && copiedObject.current) {
             const clonedObject = fabric.util.object.clone(copiedObject.current)
             clonedObject.set({ top: clonedObject.top + 10, left: clonedObject.left + 10 })
             editorRef.current.add(clonedObject)
           }
-          break;
+          break
         }
         case 90: {
           if (event.metaKey) {
             console.log('Undo')
           }
-          break;
+          break
         }
       }
     }
@@ -124,11 +134,11 @@ const Editor = ({
   const onObjectModified = (event) => {
     // Update fontSize when we scale textboxes
     if (event.action === 'scale' && R.hasPath(['fontSize'], event.target)) {
-      event.target.fontSize *= event.target.scaleX;
-      event.target.fontSize = event.target.fontSize.toFixed(0);
-      event.target.scaleX = 1;
-      event.target.scaleY = 1;
-      event.target._clearCache();
+      event.target.fontSize *= event.target.scaleX
+      event.target.fontSize = event.target.fontSize.toFixed(0)
+      event.target.scaleX = 1
+      event.target.scaleY = 1
+      event.target._clearCache()
       updateTextAttribute({ fontSize: event.target.fontSize })
     }
   }
@@ -145,13 +155,13 @@ const Editor = ({
       fill: '#FFFFFF',
       stroke: '#000000',
       strokeWidth: 1,
-      textAlign: 'center'
+      textAlign: 'center',
     })
     text.setControlsVisibility({
       mt: false,
       mr: false,
       mb: false,
-      ml: false
+      ml: false,
     })
     editorRef.current.add(text)
     editorRef.current.bringToFront(text)
@@ -165,57 +175,67 @@ const Editor = ({
 
     const updatedSelectedObject = {
       ...selectedObject,
-      ...attribute
+      ...attribute,
     }
     setSelectedObject(updatedSelectedObject)
   }
 
   const addSticker = async (sticker) => {
     const stickerUrl = await getSignedUrl('stickers', sticker.path)
-    fabric.Image.fromURL(stickerUrl, (img) => {
-      img.set({
-        left: editorRef.current.width / 2,
-        top: editorRef.current.height / 2,
-        originX: 'center',
-        originY: 'center',
-      })
-      editorRef.current.add(img)
-    }, { crossOrigin: 'anonymous' })
+    fabric.Image.fromURL(
+      stickerUrl,
+      (img) => {
+        img.set({
+          left: editorRef.current.width / 2,
+          top: editorRef.current.height / 2,
+          originX: 'center',
+          originY: 'center',
+        })
+        editorRef.current.add(img)
+      },
+      { crossOrigin: 'anonymous' }
+    )
   }
 
   const mountBackgroundImage = (url) => {
     editorRef.current.remove(...editorRef.current.getObjects())
-    fabric.Image.fromURL(url, (img) => {
-      const imageDimensions = { width: img.width, height: img.height }
-      const scale = resizeImageToCanvas(imageDimensions, EDITOR_DIMENSIONS)
-      
-      // Resize the canvas to fit the background snuggly so that we do not export
-      // with any whitespace
-      // [TODO] Small bug - uploading drake meme, followed by communist bugs meme
-      // The canvas resizing isn't updating properly
-      if (EDITOR_DIMENSIONS.width > img.width * scale) {
-        editorRef.current.setWidth(img.width * scale)
-      } else if (EDITOR_DIMENSIONS.height > img.height * scale) {
-        editorRef.current.setHeight(img.height * scale)
-      }
-      editorRef.current.calcOffset()
+    fabric.Image.fromURL(
+      url,
+      (img) => {
+        const imageDimensions = { width: img.width, height: img.height }
+        const scale = resizeImageToCanvas(imageDimensions, EDITOR_DIMENSIONS)
 
-      img.set({
-        left: editorRef.current.width / 2,
-        top: editorRef.current.height / 2,
-        originX: 'center',
-        originY: 'center',
-        scaleX: scale,
-        scaleY: scale,
-        selectable: false,
-        evented: false,
-        isBackground: true,
-      })
-      editorRef.current.add(img)
-      editorRef.current.sendToBack(img)
-    }, { crossOrigin: 'anonymous' })
+        // Resize the canvas to fit the background snuggly so that we do not export
+        // with any whitespace
+        // [TODO] Small bug - uploading drake meme, followed by communist bugs meme
+        // The canvas resizing isn't updating properly
+        if (EDITOR_DIMENSIONS.width > img.width * scale) {
+          editorRef.current.setWidth(img.width * scale)
+        } else if (EDITOR_DIMENSIONS.height > img.height * scale) {
+          editorRef.current.setHeight(img.height * scale)
+        }
+        editorRef.current.calcOffset()
+
+        img.set({
+          left: editorRef.current.width / 2,
+          top: editorRef.current.height / 2,
+          originX: 'center',
+          originY: 'center',
+          scaleX: scale,
+          scaleY: scale,
+          selectable: false,
+          evented: false,
+          isBackground: true,
+        })
+        editorRef.current.add(img)
+        editorRef.current.sendToBack(img)
+      },
+      { crossOrigin: 'anonymous' }
+    )
   }
-  
+
+  /* Misc methods */
+
   const onSaveTemplate = async () => {
     const canvasJson = getCanvasJson(editorRef.current)
     if (!name) {
@@ -224,7 +244,7 @@ const Editor = ({
     if (canvasJson.objects.length === 0) {
       return console.warn('There are no objects on your canvas')
     }
-    await saveTemplate(name, canvasJson);
+    await saveTemplate(name, canvasJson)
   }
 
   const onExportCanvas = () => {
@@ -241,18 +261,14 @@ const Editor = ({
       <div className="w-full flex items-center justify-between">
         {isTextObjectSelected ? (
           <div className="flex items-center space-x-2">
-
             <FontFamily
               fonts={DEFAULT_FONTS}
               selectedObject={selectedObject}
               updateTextAttribute={updateTextAttribute}
             />
 
-            <FontSize
-              selectedObject={selectedObject}
-              updateTextAttribute={updateTextAttribute}
-            />
-            
+            <FontSize selectedObject={selectedObject} updateTextAttribute={updateTextAttribute} />
+
             <TextFillColour
               swatches={DEFAULT_SWATCHES}
               selectedObject={selectedObject}
@@ -265,50 +281,65 @@ const Editor = ({
               updateTextAttribute={updateTextAttribute}
             />
 
-            <TextAlign
-              selectedObject={selectedObject}
-              updateTextAttribute={updateTextAttribute}
-            />
-            
+            <TextAlign selectedObject={selectedObject} updateTextAttribute={updateTextAttribute} />
           </div>
         ) : (
           <div />
         )}
 
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <StickerSelection
-              stickers={stickers}
-              onAddSticker={addSticker}
-            />
-            <div className="h-10 flex">
-              <Button type="text" icon={<IconType size="medium" strokeWidth={2} />} onClick={addNewText} />
+        {!isCanvasEmpty ? (
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <StickerSelection stickers={stickers} onAddSticker={addSticker} />
+              <div className="h-10 flex">
+                <Button
+                  type="text"
+                  icon={<IconType size="medium" strokeWidth={2} />}
+                  onClick={addNewText}
+                />
+              </div>
             </div>
+            <Button type="secondary" onClick={onSelectChangeTemplate}>
+              Change template
+            </Button>
           </div>
-          <Button type="secondary" onClick={onSelectChangeTemplate}>Change template</Button>
-        </div>
+        ) : (
+          <div className="h-[40px]" />
+        )}
       </div>
 
-      <div className="border border-gray-500 rounded-md flex items-center justify-center" style={{ width: EDITOR_DIMENSIONS.width }}>
-        <canvas
-          id="editor"
-          width={EDITOR_DIMENSIONS.width}
-          height={EDITOR_DIMENSIONS.height}
-        />
+      <div
+        className="border border-gray-500 rounded-md flex items-center justify-center relative"
+        style={{ width: EDITOR_DIMENSIONS.width }}
+      >
+        {isCanvasEmpty && (
+          <EmptyState
+            uploading={uploading}
+            onFilesUpload={onFilesUpload}
+            onSelectChangeTemplate={onSelectChangeTemplate}
+          />
+        )}
+        <canvas id="editor" width={EDITOR_DIMENSIONS.width} height={EDITOR_DIMENSIONS.height} />
       </div>
 
-      <div className="w-full flex items-center justify-between">
-        <Input
-          className="w-64"
-          placeholder="Name your meme template"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <div className="flex items-center space-x-4">
-          <Button type="primary" onClick={onSaveTemplate}>Save template</Button>
-          <Button type="primary" onClick={onExportCanvas}>Export meme</Button>
+      {!isCanvasEmpty && (
+        <div className="w-full flex items-center justify-between">
+          <Input
+            className="w-64"
+            placeholder="Name your meme template"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <div className="flex items-center space-x-4">
+            <Button type="primary" onClick={onSaveTemplate}>
+              Save template
+            </Button>
+            <Button type="primary" onClick={onExportCanvas}>
+              Export meme
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -34,7 +34,13 @@ export const getStickers = async () => {
   const { data } = await supabase
     .from('stickers')
     .select()
-  return data
+  const res = await Promise.all(
+    data.map(async (sticker) => {
+      const signedUrl = await getSignedUrl(STICKERS_BUCKET, sticker.path)
+      return { ...sticker, url: signedUrl }
+    })
+  )
+  return res
 }
 
 export const getTemplates = async() => {
@@ -55,4 +61,24 @@ export const saveTemplate = async (name, json) => {
     .from('templates')
     .insert([{ name, json }])
   console.log('saveTemplate', data, error)
+}
+
+export const signUp = async (email, password) => {
+  return await supabase.auth.signUp({ email, password })
+}
+
+export const signIn = async (email, password) => {
+  return await supabase.auth.signIn({ email, password })
+}
+
+export const signOut = async () => {
+  return await supabase.auth.signOut()
+}
+
+export const getSession = () => {
+  return supabase.auth.session()
+}
+
+export const getUser = () => {
+  return supabase.auth.user()
 }
