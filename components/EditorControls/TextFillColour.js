@@ -1,13 +1,42 @@
-import { Button, Dropdown } from '@supabase/ui'
+import { Button, Dropdown, Input } from '@supabase/ui'
 import * as R from 'ramda'
+import { useEffect, useState } from 'react'
 
 const TextFillColour = ({
   swatches = [],
   selectedObject = {},
   updateTextAttribute = () => {},
 }) => {
+
+  const textColour = R.pathOr('#FFFFFF', ['fill'], selectedObject)
+  const [hexColour, setHexColour] = useState(textColour)
+
+  useEffect(() => {
+    setHexColour(textColour)
+  }, [textColour])
+
+  const formatHexColour = (value) => {
+    return (value[0] !== '#' ? `#${value}` : value).toUpperCase()
+  }
+
+  const updateTextHexColour = (event) => {
+    event.preventDefault()
+
+    const formattedHexColour = formatHexColour(hexColour)
+    setHexColour(formattedHexColour)
+
+    const re = /[0-9A-Fa-f]{6}/g
+    if (!re.test(hexColour)) {
+      return console.log('Not a valid hex')
+    }
+
+    // Can be refactored to be nicer
+    updateTextAttribute({ fill: formattedHexColour })
+  }
+
   return (
     <Dropdown
+      className="!py-1"
       overlay={[
         <Dropdown.Misc>
           <div key="fill-swatches" className="flex items-center space-x-2">
@@ -20,6 +49,11 @@ const TextFillColour = ({
               />
             ), swatches)}
           </div>
+        </Dropdown.Misc>,
+        <Dropdown.Misc>
+          <form onSubmit={updateTextHexColour}>
+            <Input placeholder="#FFFFFF" value={hexColour} onChange={(event) => setHexColour(event.target.value)} />
+          </form>
         </Dropdown.Misc>
       ]}
     >

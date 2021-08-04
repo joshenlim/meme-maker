@@ -1,11 +1,39 @@
-import { Button, Dropdown } from '@supabase/ui'
+import { Button, Dropdown, Input } from '@supabase/ui'
 import * as R from 'ramda'
+import { useEffect, useState } from 'react'
 
 const TextStrokeColour = ({
   swatches = [],
   selectedObject = {},
   updateTextAttribute = () => {}
 }) => {
+
+  const textColour = R.pathOr('#FFFFFF', ['stroke'], selectedObject)
+  const [hexColour, setHexColour] = useState(textColour)
+
+  useEffect(() => {
+    setHexColour(textColour)
+  }, [textColour])
+
+  const formatHexColour = (value) => {
+    return (value[0] !== '#' ? `#${value}` : value).toUpperCase()
+  }
+
+  const updateTextHexColour = (event) => {
+    event.preventDefault()
+
+    const formattedHexColour = formatHexColour(hexColour)
+    setHexColour(formattedHexColour)
+
+    const re = /[0-9A-Fa-f]{6}/g
+    if (!re.test(hexColour)) {
+      return console.log('Not a valid hex')
+    }
+
+    // Can be refactored to be nicer
+    updateTextAttribute({ stroke: formattedHexColour })
+  }
+
   return (
     <Dropdown
       overlay={[
@@ -20,6 +48,11 @@ const TextStrokeColour = ({
               />
             ), swatches)}
           </div>
+        </Dropdown.Misc>,
+        <Dropdown.Misc>
+          <form onSubmit={updateTextHexColour}>
+            <Input placeholder="#FFFFFF" value={hexColour} onChange={(event) => setHexColour(event.target.value)} />
+          </form>
         </Dropdown.Misc>
       ]}
     >

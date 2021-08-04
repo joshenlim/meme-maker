@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-import { Input, Button, Dropdown, IconType, Typography } from '@supabase/ui'
+import { Input, Button, IconType } from '@supabase/ui'
 import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
