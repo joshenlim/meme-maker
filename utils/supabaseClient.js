@@ -10,8 +10,10 @@ const DEFAULT_EXPIRY = 10 * 365 * 24 * 60 * 60
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-export const uploadFile = async (file) => {
-  const prefix = `users/${v4()}`
+export const uploadFile = async (file, user) => {
+  const prefix = user
+    ? `users/${user.id}/${v4()}`
+    : `users/${v4()}`
   const fileOptions = { cacheControl: 3600 }
   const { data } = await supabase.storage
     .from(TEMPLATES_BUCKET)
@@ -56,11 +58,26 @@ export const getTemplates = async() => {
   return res
 }
 
-export const saveTemplate = async (name, json) => {
+export const saveDefaultTemplate = async (name, json) => {
   const { data, error } = await supabase
     .from('templates')
     .insert([{ name, json }])
   console.log('saveTemplate', data, error)
+}
+
+export const saveUserTemplate = async (user, file, json) => {
+  const prefix = `${user.id}/${file.name}`
+  const fileOptions = { cacheControl: 3600 }
+  const { data: saveImageData, error: saveImageError } = await supabase.storage
+    .from(MEMES_BUCKET)
+    .upload(prefix, file, fileOptions)
+  
+  const path = saveImageData.Key.split('/').slice(1).join('/')
+  const { data: saveRowData, error: saveDataError } = await supabase
+    .from('memes')
+    .insert([{ user_id: user.id, json, path }])
+
+  return saveRowData
 }
 
 export const signUp = async (email, password) => {

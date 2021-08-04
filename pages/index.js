@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Typography } from '@supabase/ui'
+import { Typography } from '@supabase/ui'
 
 import Editor from '../components/Editor/Editor'
 import TemplatesPanel from '../components/TemplatesPanel/TemplatesPanel'
@@ -43,7 +43,7 @@ const Home = ({ user }) => {
     setUploading(true)
     event.persist()
     const files = event.target.files
-    const key = await uploadFile(files[0])
+    const key = await uploadFile(files[0], user)
     const formattedKey = key.split('/').slice(1).join('/')
     const url = await getSignedUrl(TEMPLATES_BUCKET, formattedKey)
     setUploadedFileUrl(url)
@@ -59,12 +59,6 @@ const Home = ({ user }) => {
 
   return (
     <div className="relative h-screen">
-      <div className={`absolute top-20 right-0 transition transform ${user ? 'translate-x-1' : 'translate-x-36'}`}>
-        <Button size="medium">
-          <Typography.Text small>View your memes</Typography.Text>
-        </Button>
-      </div>
-
       <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
         <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
           <div className="flex flex-col py-8 space-y-2">
@@ -84,7 +78,6 @@ const Home = ({ user }) => {
           />
         </main>
       </div>
-
       <TemplatesPanel
         templates={templates}
         uploading={uploading}

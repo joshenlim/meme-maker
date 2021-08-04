@@ -1,4 +1,5 @@
 import { fabric } from 'fabric'
+import { v4 } from 'uuid'
 import {
   Input,
   Button,
@@ -12,8 +13,8 @@ import {
 import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
-import { resizeImageToCanvas, getCanvasJson } from '../../utils/editor'
-import { getSignedUrl, saveTemplate } from '../../utils/supabaseClient'
+import { resizeImageToCanvas, getCanvasJson, dataURLtoFile } from '../../utils/editor'
+import { getSignedUrl, saveDefaultTemplate, saveUserTemplate } from '../../utils/supabaseClient'
 
 import EmptyState from './EmptyState'
 import {
@@ -256,14 +257,18 @@ const Editor = ({
     if (canvasJson.objects.length === 0) {
       return toast.error('There are no objects on your canvas')
     }
-    await saveTemplate(name, canvasJson)
+    await saveDefaultTemplate(name, canvasJson)
   }
 
   const onSaveTemplate = async () => {
     if (!user) {
       return toast('Log in to save your memes!', { icon: '🔒' })
     }
-    return toast('Pending')
+    const canvasJson = getCanvasJson(editorRef.current)
+    const dataURL = editorRef.current.toDataURL('image/png', 1.0)
+    const file = dataURLtoFile(dataURL, v4())
+    await saveUserTemplate(user, file, canvasJson)
+    return toast.success('Successfully saved your meme!', { icon: '🥳' })
   }
 
   const onExportCanvas = () => {

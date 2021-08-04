@@ -1,4 +1,4 @@
-import { Button, IconKey, IconLock, IconMail, Input, Modal, Typography } from '@supabase/ui'
+import { Badge, Button, IconKey, IconLock, IconMail, Input, Modal, Typography } from '@supabase/ui'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { signUp, signIn } from '../../utils/supabaseClient'
@@ -75,23 +75,25 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
           <Typography.Title level={3}>Makes memes great again!</Typography.Title>
           <div className="space-y-2">
             <p>
-              <Typography.Text>Signing in gives you access to features such as:</Typography.Text>
+              <Typography.Text>Signing in gives you access to features:</Typography.Text>
             </p>
             <ul className="list-disc text-white pl-6">
               <li>
                 <Typography.Text>
-                  <span className="mr-3">💾</span>Claiming, saving, and publishing your memes
+                  <span className="mr-3">💾</span>Claim, save, and publish your memes
                 </Typography.Text>
               </li>
-              <li>
+              <li className="space-x-2">
                 <Typography.Text>
-                  <span className="mr-3">💕</span>Access to our meme community
+                  <span className="mr-3">💕</span>Be part of our meme community
                 </Typography.Text>
+                <Badge color="yellow">TBD</Badge>
               </li>
-              <li>
+              <li className="space-x-2">
                 <Typography.Text>
                   <span className="mr-3">🏆</span>Fight for the "Meme of the month" title!
                 </Typography.Text>
+                <Badge color="yellow">TBD</Badge>
               </li>
             </ul>
           </div>
