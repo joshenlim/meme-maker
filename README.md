@@ -1,7 +1,9 @@
 # Meme Maker
- Built with Next.JS, Supabase, Tailwind, and Fabric.JS
+Built with Next.JS, Supabase, Tailwind, and Fabric.JS
 
 A project built for [Supabase's Hackathon]('https://supabase.io/blog/2021/07/30/1-the-supabase-hackathon'), probably will not be maintained thereafter. A very simplified interface to build and share memes!
+
+![Screenshot 2021-08-05 at 5 55 16 PM](https://user-images.githubusercontent.com/19742402/128331519-6aaf3c2c-29de-4c03-9874-cca021cd9fb5.png)
 
 ## Features
 - Start with either selecting a template or uploading your own image
@@ -11,6 +13,7 @@ A project built for [Supabase's Hackathon]('https://supabase.io/blog/2021/07/30/
 - Copy/pasting elements in the canvas
 - Save your memes or export directly to PNG
 - View all memes created by everyone
+
 ## Additional features to do (If I had more time)
 - Allow users to edit their saved memes
 - Add more community features like liking memes and a "Meme of the Month" title
