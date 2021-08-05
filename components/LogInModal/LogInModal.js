@@ -51,13 +51,13 @@ const LogInModal = ({ visible = false, onCloseModal = () => {}, onLoginSuccess =
     }
 
     setLoading(true)
-    const { user, error } =
+    const { user, session, error } =
       view === 'SIGN_IN' ? await signIn(email, password) : await signUp(email, password)
     setLoading(false)
     if (error) {
       toast.error(error.message)
     } else {
-      onLoginSuccess(user)
+      onLoginSuccess(user, session)
     }
   }
 

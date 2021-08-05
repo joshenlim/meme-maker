@@ -38,9 +38,13 @@ function MyApp({ Component, pageProps }) {
     setShowLogInModal(true)
   }
 
-  const onLoginSuccess = (sessionUser) => {
-    toast.success(`Successfully logged in! 😄`)
-    setUser(sessionUser)
+  const onLoginSuccess = (sessionUser, session) => {
+    if (!session) {
+      toast('Check your email to confirm your account!', { icon: '✉️' })
+    } else {
+      toast.success(`Successfully logged in! 😄`)
+      setUser(sessionUser)
+    }
     setShowLogInModal(false)
   }
 
