@@ -110,30 +110,32 @@ const UserMemes = ({ user, onExpandMeme }) => {
                   </Button>
                 </div>
               )}
-              <div className="grid grid-cols-5 gap-6">
-                {R.addIndex(R.map)((content, idx) => (
-                  <div key={idx} className="space-y-6">
-                    {R.map((meme) => (
-                      <div key={meme.id} className="w-full relative group cursor-pointer">
-                        <img className="rounded-md w-full" src={meme.url} onClick={() => onExpandMeme(meme)} />
-                        <div className="flex flex-col absolute top-2 right-2 transition opacity-0 group-hover:opacity-100 space-y-2">
-                          {/* <div
-                            className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                            onClick={() => onSelectEditMeme(meme)}
-                          >
-                            <IconEdit className="w-4" strokeWidth={2} />
-                          </div> */}
-                          <div
-                            className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                            onClick={() => onSelectDeleteMeme(meme)}
-                          >
-                            <IconTrash className="w-4" strokeWidth={2} />
+              <div className="overflow-y-auto">
+                <div className="grid grid-cols-5 gap-6">
+                  {R.addIndex(R.map)((content, idx) => (
+                    <div key={idx} className="space-y-6">
+                      {R.map((meme) => (
+                        <div key={meme.id} className="w-full relative group cursor-pointer">
+                          <img className="rounded-md w-full" src={meme.url} onClick={() => onExpandMeme(meme)} />
+                          <div className="flex flex-col absolute top-2 right-2 transition opacity-0 group-hover:opacity-100 space-y-2">
+                            {/* <div
+                              className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                              onClick={() => onSelectEditMeme(meme)}
+                            >
+                              <IconEdit className="w-4" strokeWidth={2} />
+                            </div> */}
+                            <div
+                              className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                              onClick={() => onSelectDeleteMeme(meme)}
+                            >
+                              <IconTrash className="w-4" strokeWidth={2} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ), content)}
-                  </div>
-                ), memes)}
+                      ), content)}
+                    </div>
+                  ), memes)}
+                </div>
               </div>
             </>
           )}

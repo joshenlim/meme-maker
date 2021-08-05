@@ -24,7 +24,7 @@ const EmptyState = ({
       ) : (
         <>
           <div className="hidden">
-            <input ref={uploadButtonRef} type="file" onChange={onFilesUpload} />
+            <input ref={uploadButtonRef} type="file" accept=".png, .jpg, .jpeg" onChange={onFilesUpload} />
           </div>
           <Button type="secondary" onClick={onSelectUpload}>
             Upload your own image
