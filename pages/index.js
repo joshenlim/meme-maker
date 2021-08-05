@@ -10,6 +10,7 @@ import {
   getSignedUrl,
   getStickers,
   getTemplates,
+  resignTemplateUrls
 } from '../utils/supabaseClient'
 import * as R from 'ramda'
 
@@ -60,9 +61,9 @@ const Home = ({ user }) => {
     event.target.value = ''
   }
 
-  const loadTemplate = (template) => {
-    // Need to re-sign all images in the template
-    setSelectedTemplate(template)
+  const loadTemplate = async (template) => {
+    const formattedTemplate = await resignTemplateUrls(template)
+    setSelectedTemplate(formattedTemplate)
     setShowTemplatesPanel(false)
   }
 

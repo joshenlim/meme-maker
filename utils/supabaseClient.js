@@ -128,6 +128,32 @@ export const deleteMeme = async (meme) => {
   return data
 }
 
+export const resignTemplateUrls = async (template) => {
+  // At the moment since we don't allow editing of user memes
+  // assumption is that we only resign template image urls
+  const templateObjects = await Promise.all(
+    template.json.objects.map(async(object) => {
+      if (R.hasPath(['src'], object)) {
+        const key = object.src
+          .split('/sign/')[1]
+          .split('?token')[0]
+        const bucket = key.split('/')[0]
+        const prefix = key.split('/').slice(1).join('/')
+        const signedUrl = await getSignedUrl(bucket, prefix)
+        return { ...object, src: signedUrl }
+      }
+      return object
+    })
+  )
+  return { 
+    ...template,
+    json: {
+      ...template.json,
+      objects: templateObjects 
+    }
+  }
+}
+
 export const signUp = async (email, password) => {
   return await supabase.auth.signUp({ email, password })
 }
