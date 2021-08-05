@@ -280,7 +280,7 @@ const Editor = ({
     const dataURL = editorRef.current.toDataURL('image/png', 1.0)
     const file = dataURLtoFile(dataURL, v4())
     await saveUserTemplate(user, file, canvasJson, selectedTemplate)
-    return toast.success('Successfully saved your meme!', { icon: '🥳' })
+    return toast.success('Successfully saved your meme!', { icon: '🎁' })
   }
 
   const onExportCanvas = () => {
@@ -290,6 +290,7 @@ const Editor = ({
     document.body.appendChild(link)
     link.click()
     link.parentNode.removeChild(link)
+    return toast.success('Enjoy your meme!', { icon: '🥳' })
   }
 
   return (
