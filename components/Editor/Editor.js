@@ -203,6 +203,7 @@ const Editor = ({
           originY: 'center',
         })
         editorRef.current.add(img)
+        editorRef.current.setActiveObject(img)
       },
       { crossOrigin: 'anonymous' }
     )
