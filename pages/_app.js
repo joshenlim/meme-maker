@@ -10,6 +10,7 @@ import Header from '../components/Header/Header'
 import LogInModal from '../components/LogInModal/LogInModal'
 import ExpandMemeModal from '../components/ExpandMemeModal/ExpandMemeModal'
 import { getSession, getUser, signOut } from '../utils/supabaseClient'
+import { IconGitHub, Typography } from '@supabase/ui'
 
 function MyApp({ Component, pageProps }) {
 
@@ -59,7 +60,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <div className="bg-gray-800">
+    <div className="bg-gray-800 relative">
       <Head>
         <title>Meme Maker | Supabase</title>
         <link rel="icon" href="/favicon.ico" />
@@ -82,6 +83,19 @@ function MyApp({ Component, pageProps }) {
         meme={expandedMeme}
         onCloseModal={() => setExpandedMeme(null)}
       />
+      <footer className="flex items-center space-x-4 absolute bottom-0 p-6">
+        <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-600">
+          <a href='https://github.com/joshenlim/meme-maker' target="_blank">
+            <Typography><IconGitHub strokeWidth={2} /></Typography>
+          </a>
+        </div>
+        <Typography.Text>
+          Powered by {' '}
+          <a className="text-green-600 hover:text-green-400 transition" href='https://supabase.io' target="_blank">
+            Supabase
+          </a>
+        </Typography.Text>
+      </footer>
       <Portal.Root className="portal--toast">
         <Toaster
           toastOptions={{

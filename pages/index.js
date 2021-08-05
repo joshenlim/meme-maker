@@ -72,7 +72,7 @@ const Home = ({ user }) => {
       <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)'}}>
         <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
           <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
-            <div className="flex flex-col pt-8 pb-4 space-y-2">
+            <div className="flex flex-col pt-6 pb-4 space-y-2">
               <Typography.Title level={2}>Ye Ol' Meme Maker</Typography.Title>
               <Typography>Here at Supabase we love memes - and so here's a meme maker 💚</Typography>
             </div>
