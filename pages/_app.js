@@ -9,6 +9,7 @@ import * as R from 'ramda';
 
 import Header from '../components/Header/Header'
 import LogInModal from '../components/LogInModal/LogInModal'
+import ExpandMemeModal from '../components/ExpandMemeModal/ExpandMemeModal'
 import { getSession, getUser, signOut } from '../utils/supabaseClient'
 
 function MyApp({ Component, pageProps }) {
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }) {
   }, [])
 
   const [user, setUser] = useState(null)
+  const [expandedMeme, setExpandedMeme] = useState(null)
   const [showLogInModal, setShowLogInModal] = useState(false)
 
   const isAdmin = R.pathOr('', ['email'], user).includes('@supabase.io')
@@ -49,6 +51,10 @@ function MyApp({ Component, pageProps }) {
     setUser(null)
   }
 
+  const onExpandMeme = (meme) => {
+    setExpandedMeme(meme)
+  }
+
   return (
     <div className="bg-gray-800">
       <Head>
@@ -62,11 +68,16 @@ function MyApp({ Component, pageProps }) {
         onSelectLogOut={onSelectLogOut}
         onSelectLogIn={onSelectLogIn}
       />
-      <Component {...pageProps} user={user} />
+      <Component {...pageProps} user={user} onExpandMeme={onExpandMeme} />
       <LogInModal
         visible={showLogInModal}
         onLoginSuccess={onLoginSuccess}
         onCloseModal={() => setShowLogInModal(false)}
+      />
+      <ExpandMemeModal
+        visible={!R.isNil(expandedMeme)}
+        meme={expandedMeme}
+        onCloseModal={() => setExpandedMeme(null)}
       />
       <Portal.Root className="portal--toast">
         <Toaster

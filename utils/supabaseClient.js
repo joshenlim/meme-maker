@@ -1,4 +1,5 @@
 import { v4 } from 'uuid'
+import * as R from 'ramda'
 import { createClient } from '@supabase/supabase-js'
 
 const MEMES_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_MEMES_BUCKET
@@ -6,6 +7,7 @@ const STICKERS_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_STICKERS_BUCKET
 const TEMPLATES_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_TEMPLATES_BUCKET
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const DEFAULT_LIMIT = 1000
 const DEFAULT_EXPIRY = 10 * 365 * 24 * 60 * 60
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
@@ -49,6 +51,7 @@ export const getTemplates = async() => {
   const { data } = await supabase
     .from('templates')
     .select()
+    .limit(DEFAULT_LIMIT)
   const res = await Promise.all(
     data.map(async (template) => {
       const signedUrl = await getSignedUrl(TEMPLATES_BUCKET, template.path)
@@ -65,7 +68,7 @@ export const saveDefaultTemplate = async (name, json) => {
   console.log('saveTemplate', data, error)
 }
 
-export const saveUserTemplate = async (user, file, json) => {
+export const saveUserTemplate = async (user, file, json, template) => {
   const prefix = `${user.id}/${file.name}`
   const fileOptions = { cacheControl: 3600 }
   const { data: saveImageData, error: saveImageError } = await supabase.storage
@@ -75,9 +78,54 @@ export const saveUserTemplate = async (user, file, json) => {
   const path = saveImageData.Key.split('/').slice(1).join('/')
   const { data: saveRowData, error: saveDataError } = await supabase
     .from('memes')
-    .insert([{ user_id: user.id, json, path }])
+    .insert([{
+      json,
+      path,
+      user_id: user.id,
+      template_id: R.pathOr(null, ['id'], template)
+    }])
 
   return saveRowData
+}
+
+export const getUserMemes = async (user) => {
+  const { data } = await supabase
+    .from('memes')
+    .select()
+    .eq('user_id', user.id)
+    .is('deleted_at', null)
+    .limit(DEFAULT_LIMIT)
+  const res = await Promise.all(
+    data.map(async (meme) => {
+      const signedUrl = await getSignedUrl(MEMES_BUCKET, meme.path)
+      return { ...meme, url: signedUrl }
+    })
+  )
+  return res
+}
+
+export const getCommunityMemes = async () => {
+  const { data } = await supabase
+    .from('memes')
+    .select()
+    .is('is_public', true)
+    .is('deleted_at', null)
+    .limit(DEFAULT_LIMIT)
+  const res = await Promise.all(
+    data.map(async (meme) => {
+      const signedUrl = await getSignedUrl(MEMES_BUCKET, meme.path)
+      return { ...meme, url: signedUrl }
+    })
+  )
+  return res
+}
+
+export const deleteMeme = async (meme) => {
+  const { data } = await supabase
+    .from('memes')
+    .update({ deleted_at: new Date().toISOString() })
+    .match({ id: meme.id })
+  return data
 }
 
 export const signUp = async (email, password) => {

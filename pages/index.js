@@ -41,6 +41,7 @@ const Home = ({ user }) => {
 
   const onFilesUpload = async (event) => {
     setUploading(true)
+    setSelectedTemplate(null)
     event.persist()
     const files = event.target.files
     const key = await uploadFile(files[0], user)
@@ -53,12 +54,13 @@ const Home = ({ user }) => {
   }
 
   const loadTemplate = (template) => {
+    // Need to re-sign all images in the template
     setSelectedTemplate(template)
     setShowTemplatesPanel(false)
   }
 
   return (
-    <div className="relative h-screen">
+    <div className="relative" style={{ height: 'calc(100vh - 64px)'}}>
       <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
         <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
           <div className="flex flex-col py-8 space-y-2">

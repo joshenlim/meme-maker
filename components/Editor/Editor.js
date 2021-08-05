@@ -20,6 +20,7 @@ import EmptyState from './EmptyState'
 import {
   FontSize,
   FontFamily,
+  LayerOrder,
   StickerSelection,
   TextAlign,
   TextFillColour,
@@ -46,9 +47,6 @@ const Editor = ({
   const [selectedObject, setSelectedObject] = useState(null)
   const isCanvasEmpty = !(selectedTemplate || uploadedFileUrl)
   const isTextObjectSelected = R.hasPath(['fontSize'], selectedObject)
-
-  // TODO
-  const [undoTransactions, setUndoTransactions] = useState([])
 
   useEffect(() => {
     const editor = new fabric.Canvas('editor', {
@@ -210,6 +208,19 @@ const Editor = ({
     )
   }
 
+  const shiftObjectForward = () => {
+    const activeObject = editorRef.current.getActiveObject()
+    editorRef.current.bringForward(activeObject)
+  }
+
+  const shiftObjectBackward = () => {
+    const activeObject = editorRef.current.getActiveObject()
+    const objectIndex = editorRef.current.getObjects().indexOf(activeObject)
+    if (objectIndex > 1) {
+      editorRef.current.sendBackwards(activeObject)
+    }
+  }
+
   const mountBackgroundImage = (url) => {
     editorRef.current.remove(...editorRef.current.getObjects())
     fabric.Image.fromURL(
@@ -267,7 +278,7 @@ const Editor = ({
     const canvasJson = getCanvasJson(editorRef.current)
     const dataURL = editorRef.current.toDataURL('image/png', 1.0)
     const file = dataURLtoFile(dataURL, v4())
-    await saveUserTemplate(user, file, canvasJson)
+    await saveUserTemplate(user, file, canvasJson, selectedTemplate)
     return toast.success('Successfully saved your meme!', { icon: '🥳' })
   }
 
@@ -314,6 +325,7 @@ const Editor = ({
         {!isCanvasEmpty ? (
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
+              {!R.isNil(selectedObject) && <LayerOrder shiftObjectForward={shiftObjectForward} shiftObjectBackward={shiftObjectBackward} />}
               <StickerSelection stickers={stickers} onAddSticker={addSticker} />
               <div className="h-10 flex">
                 <Button
@@ -348,12 +360,16 @@ const Editor = ({
 
       {!isCanvasEmpty && (
         <div className="w-full flex items-center justify-between">
-          <Input
-            className="w-64"
-            placeholder="Name your meme template"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
+          {isAdmin ? (
+            <Input
+              className="w-64"
+              placeholder="Name your meme template"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          ) : (
+            <div />
+          )}
           <Dropdown
             align="end"
             overlay={[
@@ -369,7 +385,7 @@ const Editor = ({
                   ]
                 : []),
               <Dropdown.Item key="save-template" icon={<IconSave />} onClick={onSaveTemplate}>
-                Save as template
+                Save your meme
               </Dropdown.Item>,
               <Dropdown.Item key="export" icon={<IconImage />} onClick={onExportCanvas}>
                 Export as PNG
@@ -380,7 +396,7 @@ const Editor = ({
               type="primary"
               iconRight={<IconChevronDown className="text-white" strokeWidth={2} />}
             >
-              Save your meme
+              Save
             </Button>
           </Dropdown>
         </div>
