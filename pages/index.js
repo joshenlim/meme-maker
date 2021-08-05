@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Typography } from '@supabase/ui'
+import Image from 'next/image'
 
 import Editor from '../components/Editor/Editor'
+import HelpModal from '../components/HelpModal/HelpModal'
 import TemplatesPanel from '../components/TemplatesPanel/TemplatesPanel'
 import {
   uploadFile,
@@ -20,7 +22,9 @@ const Home = ({ user }) => {
   const [uploading, setUploading] = useState(false)
   const [uploadedFileUrl, setUploadedFileUrl] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState(null)
+  const [loadAnimations, setLoadAnimations] = useState(false)
   const [showTemplatesPanel, setShowTemplatesPanel] = useState(false)
+  const [showHelpModal, setShowHelpModal] = useState(false)
 
   const isAdmin = R.pathOr('', ['email'], user).includes('@supabase.io')
 
@@ -33,6 +37,9 @@ const Home = ({ user }) => {
       setTemplates(templates)
     }
     initAssets()
+    setTimeout(() => {
+      setLoadAnimations(true)
+    }, 2000)
   }, [])
 
   const onSelectChangeTemplate = () => {
@@ -60,35 +67,52 @@ const Home = ({ user }) => {
   }
 
   return (
-    <div className="relative" style={{ height: 'calc(100vh - 64px)'}}>
-      <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
-        <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
-          <div className="flex flex-col py-8 space-y-2">
-            <Typography.Title level={2}>Ye Ol' Meme Maker</Typography.Title>
-            <Typography>Here at Supabase we love memes - and so here's a meme maker 💚</Typography>
+    <>
+      <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)'}}>
+        <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
+          <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
+            <div className="flex flex-col pt-8 pb-6 space-y-2">
+              <Typography.Title level={2}>Ye Ol' Meme Maker</Typography.Title>
+              <Typography>Here at Supabase we love memes - and so here's a meme maker 💚</Typography>
+            </div>
+            <Editor
+              user={user}
+              isAdmin={isAdmin}
+              stickers={stickers}
+              templates={templates}
+              selectedTemplate={selectedTemplate}
+              uploading={uploading}
+              uploadedFileUrl={uploadedFileUrl}
+              onFilesUpload={onFilesUpload}
+              onSelectChangeTemplate={onSelectChangeTemplate}
+            />
+          </main>
+        </div>
+        <TemplatesPanel
+          templates={templates}
+          uploading={uploading}
+          visible={showTemplatesPanel}
+          loadTemplate={loadTemplate}
+          onFilesUpload={onFilesUpload}
+          hideTemplatesPanel={() => setShowTemplatesPanel(false)}
+        />
+        <div className="flex justify-end absolute bottom-0 right-0 group">
+          <div className={`-translate-x-20 ${loadAnimations ? 'translate-y-36' : 'translate-y-64'} transition group-hover:translate-y-24 cursor-pointer`}>
+            <Image src="/img/doge.png" width={150} height={204} onClick={() => setShowHelpModal(true)} />
           </div>
-          <Editor
-            user={user}
-            isAdmin={isAdmin}
-            stickers={stickers}
-            templates={templates}
-            selectedTemplate={selectedTemplate}
-            uploading={uploading}
-            uploadedFileUrl={uploadedFileUrl}
-            onFilesUpload={onFilesUpload}
-            onSelectChangeTemplate={onSelectChangeTemplate}
-          />
-        </main>
+          <p
+            className="text-white absolute w-64 transition opacity-0 translate-y-32 rotate-0 group-hover:translate-y-16 group-hover:opacity-100 group-hover:-rotate-12"
+            style={{ fontFamily: 'Impact', WebkitTextStrokeColor: '#000000', WebkitTextStrokeWidth: 1 }}
+          >
+            MUCH COOL, HELP NEED?
+          </p>
+        </div>
       </div>
-      <TemplatesPanel
-        templates={templates}
-        uploading={uploading}
-        visible={showTemplatesPanel}
-        loadTemplate={loadTemplate}
-        onFilesUpload={onFilesUpload}
-        hideTemplatesPanel={() => setShowTemplatesPanel(false)}
+      <HelpModal
+        visible={showHelpModal}
+        onCloseModal={() => setShowHelpModal(false)}
       />
-    </div>
+    </>
   )
 }
 

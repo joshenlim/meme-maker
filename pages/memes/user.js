@@ -1,6 +1,7 @@
 import { Button, IconEdit, IconLoader, IconTrash, Typography } from '@supabase/ui'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/Image'
 import * as R from 'ramda'
 import DeleteMemeModal from '../../components/DeleteMemeModal/DeleteMemeModal'
 import { getUserMemes, deleteMeme } from '../../utils/supabaseClient'
@@ -44,7 +45,7 @@ const UserMemes = ({ user, onExpandMeme }) => {
   return !user ? (
     <div className="py-10 flex flex-col items-center justify-center space-y-4" style={{ height: 'calc(100vh - 64px)'}}>
       <div className="relative">
-        <img className="w-[400px]" src="/img/you-shall-not-pass.png" />
+        <Image src="/img/you-shall-not-pass.png" width={400} height={203} />
         <p
           className={`text-white absolute transition delay-500 translate-x-16 ${loadAnimations ? 'opacity-100 -translate-y-14' : 'opacity-0 -translate-y-12'}`}
           style={{
@@ -99,7 +100,7 @@ const UserMemes = ({ user, onExpandMeme }) => {
               </div>
               {R.pathOr([], [0], memes).length === 0 && (
                 <div className="flex flex-col items-center justify-center h-full space-y-4">
-                  <img className="w-[150px]" src="/img/polite-cat.png" />
+                  <Image src="/img/polite-cat.png" width={150} height={150} />
                   <Typography>You don't have any saved memes yet</Typography>
                   <Button>
                     <Link href='/'>

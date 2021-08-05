@@ -3,7 +3,6 @@ import '../styles/globals.css'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { Badge, Button, Typography } from '@supabase/ui'
 import * as Portal from '@radix-ui/react-portal'
 import * as R from 'ramda';
 
@@ -33,7 +32,7 @@ function MyApp({ Component, pageProps }) {
   const [expandedMeme, setExpandedMeme] = useState(null)
   const [showLogInModal, setShowLogInModal] = useState(false)
 
-  const isAdmin = R.pathOr('', ['email'], user).includes('@supabase.io')
+  const isAdmin = R.pathOr('', ['email'], user) === ('joshen@supabase.io')
 
   const onSelectLogIn = () => {
     setShowLogInModal(true)
