@@ -14,7 +14,7 @@ A project built for [Supabase's Hackathon]('https://supabase.io/blog/2021/07/30/
 - Save your memes or export directly to PNG
 - View all memes created by everyone
 
-## Additional features to do (If I had more time)
+## Additional features I'd have added
 - Allow users to edit their saved memes
 - Add more community features like liking memes and a "Meme of the Month" title
 - Show trending templates that are being used

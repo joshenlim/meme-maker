@@ -8,6 +8,7 @@ const DeleteMemeModal = ({
 }) => {
   return (
     <Modal
+      className="relative"
       size="medium"
       title="Confirm to delete meme?"
       description={`${messages[messages.length * Math.random() | 0]} Are you sure? This action cannot be undone.`}
@@ -15,7 +16,9 @@ const DeleteMemeModal = ({
       visible={visible}
       onCancel={onCancelDelete}
       onConfirm={onConfirmDelete}
-    />
+    >
+      <img className="w-[100px] absolute bottom-0 right-12" src="/img/surprised-pikachu.png" />
+    </Modal>
   )
 }
 
