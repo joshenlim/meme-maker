@@ -20,6 +20,7 @@ const Home = ({ user }) => {
   const [templates, setTemplates] = useState([])
   const [stickers, setStickers] = useState([])
 
+  const [loadingAssets, setLoadingAssets] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [uploadedFileUrl, setUploadedFileUrl] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState(null)
@@ -36,6 +37,8 @@ const Home = ({ user }) => {
 
       const templates = await getTemplates()
       setTemplates(templates)
+
+      setLoadingAssets(false)
     }
     initAssets()
     setTimeout(() => {
@@ -110,6 +113,7 @@ const Home = ({ user }) => {
         </div>
         <TemplatesPanel
           templates={templates}
+          loadingAssets={loadingAssets}
           uploading={uploading}
           visible={showTemplatesPanel}
           loadTemplate={loadTemplate}

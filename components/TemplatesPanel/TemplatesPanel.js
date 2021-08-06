@@ -1,9 +1,10 @@
-import { Button, SidePanel } from '@supabase/ui'
+import { Button, IconLoader, SidePanel, Typography } from '@supabase/ui'
 import { useRef } from 'react'
 import * as R from 'ramda'
 
 const TemplatesPanel = ({
   templates = [],
+  loadingAssets = false,
   uploading = false,
   visible = false,
   loadTemplate = () => {},
@@ -40,19 +41,29 @@ const TemplatesPanel = ({
         </Button>
 
         <div className="mt-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 190px)' }}>
-          <div className="grid grid-cols-3 gap-3">
-            {R.map(
-              (template) => (
-                <div
-                  key={template.name}
-                  className="h-32 bg-center bg-no-repeat bg-cover rounded-md cursor-pointer"
-                  style={{ backgroundImage: `url('${template.url}')` }}
-                  onClick={() => loadTemplate(template)}
-                />
-              ),
-              templates
-            )}
-          </div>
+          {loadingAssets ? (
+            <div
+              className="space-y-2 flex flex-col items-center justify-center"
+              style={{ height: 'calc(100vh - 190px)' }}
+            >
+              <IconLoader className="text-white animate-spin" />
+              <Typography.Text small>Loading templates</Typography.Text>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-3">
+              {R.map(
+                (template) => (
+                  <div
+                    key={template.name}
+                    className="h-32 bg-center bg-no-repeat bg-cover rounded-md cursor-pointer"
+                    style={{ backgroundImage: `url('${template.url}')` }}
+                    onClick={() => loadTemplate(template)}
+                  />
+                ),
+                templates
+              )}
+            </div>
+          )}
         </div>
 
         {/* Probably add some search or something */}
