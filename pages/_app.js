@@ -84,15 +84,15 @@ function MyApp({ Component, pageProps }) {
             property="og:image"
             content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
           />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:creator" content="joshenlimek" />
-          <meta property="twitter:title" content="Meme Maker | Powered by Supabase" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:creator" content="joshenlimek" />
+          <meta name="twitter:title" content="Meme Maker | Powered by Supabase" />
           <meta
-            property="twitter:description"
+            name="twitter:description"
             content="Create your best memes in seconds with this simple canvas editor."
           />
           <meta
-            property="twitter:image"
+            name="twitter:image"
             content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
           />
           <link rel="icon" href="/favicon.ico" />
