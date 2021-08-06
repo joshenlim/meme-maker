@@ -327,7 +327,12 @@ const Editor = ({
         {!isCanvasEmpty ? (
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              {!R.isNil(selectedObject) && <LayerOrder shiftObjectForward={shiftObjectForward} shiftObjectBackward={shiftObjectBackward} />}
+              {!R.isNil(selectedObject) && (
+                <LayerOrder
+                  shiftObjectForward={shiftObjectForward}
+                  shiftObjectBackward={shiftObjectBackward}
+                />
+              )}
               <StickerSelection stickers={stickers} onAddSticker={addSticker} />
               <div className="h-10 flex">
                 <Button

@@ -2,13 +2,7 @@ import Link from 'next/link'
 import { useRef } from 'react'
 import { Badge, Button, Dropdown, IconChevronDown, Typography } from '@supabase/ui'
 
-const Header = ({
-  user,
-  isAdmin = false,
-  onSelectLogOut = () => {},
-  onSelectLogIn = () => {},
-}) => {
-
+const Header = ({ user, isAdmin = false, onSelectLogOut = () => {}, onSelectLogIn = () => {} }) => {
   const browseMemesRef = useRef(null)
 
   const closeDropdown = () => {
@@ -23,7 +17,7 @@ const Header = ({
       <div className="max-w-screen-xl w-full flex items-center justify-between mx-auto">
         <Link href="/">
           <a>
-            <img className="h-5 w-auto" src="/img/supabase-dark.svg" alt="" />
+            <img className="h-5 w-auto" src="/img/logo.svg" alt="" />
           </a>
         </Link>
         <div className="flex items-center space-x-6">
@@ -59,7 +53,9 @@ const Header = ({
               </div>,
             ]}
           >
-            <Button type="secondary" iconRight={<IconChevronDown strokeWidth={2} />}>Browse memes</Button>
+            <Button type="secondary" iconRight={<IconChevronDown strokeWidth={2} />}>
+              Browse memes
+            </Button>
           </Dropdown>
           {user ? (
             <Button type="secondary" onClick={onSelectLogOut}>

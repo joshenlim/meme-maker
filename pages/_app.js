@@ -4,7 +4,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 import * as Portal from '@radix-ui/react-portal'
-import * as R from 'ramda';
+import * as R from 'ramda'
 
 import Header from '../components/Header/Header'
 import LogInModal from '../components/LogInModal/LogInModal'
@@ -13,10 +13,9 @@ import { getSession, getUser, signOut } from '../utils/supabaseClient'
 import { IconGitHub, Typography } from '@supabase/ui'
 
 function MyApp({ Component, pageProps }) {
-
   useEffect(() => {
     document.body.className = 'dark'
-    
+
     const session = getSession()
     if (session) {
       const sessionExpired = session.expires_at <= Math.floor(Date.now() / 1000)
@@ -33,7 +32,7 @@ function MyApp({ Component, pageProps }) {
   const [expandedMeme, setExpandedMeme] = useState(null)
   const [showLogInModal, setShowLogInModal] = useState(false)
 
-  const isAdmin = R.pathOr('', ['email'], user) === ('joshen@supabase.io')
+  const isAdmin = R.pathOr('', ['email'], user) === 'joshen@supabase.io'
 
   const onSelectLogIn = () => {
     setShowLogInModal(true)
@@ -84,14 +83,20 @@ function MyApp({ Component, pageProps }) {
         onCloseModal={() => setExpandedMeme(null)}
       />
       <footer className="flex items-center space-x-4 absolute bottom-0 p-6">
-        <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-600">
-          <a href='https://github.com/joshenlim/meme-maker' target="_blank">
-            <Typography><IconGitHub strokeWidth={2} /></Typography>
+        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-600">
+          <a href="https://github.com/joshenlim/meme-maker" target="_blank">
+            <Typography>
+              <IconGitHub className="w-4 h-4" strokeWidth={2} />
+            </Typography>
           </a>
         </div>
         <Typography.Text>
           Powered by {' '}
-          <a className="text-green-600 hover:text-green-400 transition" href='https://supabase.io' target="_blank">
+          <a
+            className="text-green-600 hover:text-green-400 transition"
+            href="https://supabase.io"
+            target="_blank"
+          >
             Supabase
           </a>
         </Typography.Text>

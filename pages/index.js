@@ -10,7 +10,7 @@ import {
   getSignedUrl,
   getStickers,
   getTemplates,
-  resignTemplateUrls
+  resignTemplateUrls,
 } from '../utils/supabaseClient'
 import * as R from 'ramda'
 
@@ -69,12 +69,31 @@ const Home = ({ user }) => {
 
   return (
     <>
-      <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)'}}>
+      <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
         <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
           <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
-            <div className="flex flex-col pt-6 pb-4 space-y-2">
-              <Typography.Title level={2}>Ye Ol' Meme Maker</Typography.Title>
-              <Typography>Here at Supabase we love memes - and so here's a meme maker 💚</Typography>
+            <div className="pt-6 mb-2">
+              <Typography.Title className="font-medium bg-center bg-no-repeat bg-cover" level={2}>
+                Create your{' '}
+                <span
+                  className="bg-center bg-no-repeat bg-cover"
+                  style={{
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    backgroundImage:
+                      "url('https://i.giphy.com/media/2tNvsKkc0qFdNhJmKk/giphy.webp')",
+                  }}
+                >
+                  best memes
+                </span>{' '}
+                within seconds
+              </Typography.Title>
+            </div>
+            <div className="pb-4">
+              <Typography>
+                Here at Supabase we love memes - and so here's a meme maker 💚
+              </Typography>
             </div>
             <Editor
               user={user}
@@ -98,21 +117,31 @@ const Home = ({ user }) => {
           hideTemplatesPanel={() => setShowTemplatesPanel(false)}
         />
         <div className="flex justify-end absolute bottom-0 right-0 group">
-          <div className={`-translate-x-20 ${loadAnimations ? 'translate-y-36' : 'translate-y-64'} transition group-hover:translate-y-24 cursor-pointer`}>
-            <Image src="/img/doge.png" width={150} height={204} onClick={() => setShowHelpModal(true)} />
+          <div
+            className={`-translate-x-20 ${
+              loadAnimations ? 'translate-y-36' : 'translate-y-64'
+            } transition group-hover:translate-y-24 cursor-pointer`}
+          >
+            <Image
+              src="/img/doge.png"
+              width={150}
+              height={204}
+              onClick={() => setShowHelpModal(true)}
+            />
           </div>
           <p
             className="text-white absolute w-64 transition opacity-0 translate-y-32 rotate-0 group-hover:translate-y-16 group-hover:opacity-100 group-hover:-rotate-12"
-            style={{ fontFamily: 'Impact', WebkitTextStrokeColor: '#000000', WebkitTextStrokeWidth: 1 }}
+            style={{
+              fontFamily: 'Impact',
+              WebkitTextStrokeColor: '#000000',
+              WebkitTextStrokeWidth: 1,
+            }}
           >
             MUCH COOL, HELP NEED?
           </p>
         </div>
       </div>
-      <HelpModal
-        visible={showHelpModal}
-        onCloseModal={() => setShowHelpModal(false)}
-      />
+      <HelpModal visible={showHelpModal} onCloseModal={() => setShowHelpModal(false)} />
     </>
   )
 }

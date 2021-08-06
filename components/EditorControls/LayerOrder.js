@@ -1,10 +1,7 @@
 import { Button, Dropdown, IconLayers, IconChevronUp, IconChevronDown } from '@supabase/ui'
 import * as R from 'ramda'
 
-const LayerOrder = ({
-  shiftObjectForward = () => {},
-  shiftObjectBackward = () => {}
-}) => {
+const LayerOrder = ({ shiftObjectForward = () => {}, shiftObjectBackward = () => {} }) => {
   return (
     <Dropdown
       overlay={[
@@ -27,10 +24,7 @@ const LayerOrder = ({
       ]}
     >
       <div className="h-10 flex">
-        <Button
-          type="text"
-          icon={<IconLayers size="medium" strokeWidth={2} />}
-        />
+        <Button type="text" icon={<IconLayers size="medium" strokeWidth={2} />} />
       </div>
     </Dropdown>
   )

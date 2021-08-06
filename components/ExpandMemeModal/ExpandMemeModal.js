@@ -1,17 +1,8 @@
 import { Modal } from '@supabase/ui'
 
-const ExpandMemeModal = ({
-  meme,
-  visible = false,
-  onCloseModal = () => {}
-}) => {
+const ExpandMemeModal = ({ meme, visible = false, onCloseModal = () => {} }) => {
   return (
-    <Modal
-      hideFooter
-      closable
-      visible={visible}
-      onCancel={onCloseModal}
-    >
+    <Modal hideFooter closable visible={visible} onCancel={onCloseModal}>
       {meme && <img className="mx-auto" src={meme.url} />}
     </Modal>
   )

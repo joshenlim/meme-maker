@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="391px" height="57px" viewBox="0 0 391 57" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>Group 15</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="13.8330273%" y1="0%" x2="108.415486%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#000000" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="108.465971%" y1="0%" x2="13.8330273%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#000000" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-15" transform="translate(0.000000, -3.000000)">
+            <g id="Group-13" transform="translate(0.000000, 3.000000)" fill-rule="nonzero">
+                <path d="M48.0248942,10.7028651 L31.64,24.72 L10.56,7.28 L10.56,55.72 C10.56,56.2722847 10.1122847,56.72 9.56,56.72 L1,56.72 C0.44771525,56.72 -9.09427066e-13,56.2722847 -9.09494702e-13,55.72 L-9.09494702e-13,1 C-9.09562337e-13,0.44771525 0.44771525,1.13788291e-13 1,1.13686838e-13 L14.56,1.13686838e-13 L14.56,1.13686838e-13 L31.6,14.96 L48.24,1.13686838e-13 L48.0248942,10.7028651 Z" id="M" fill="#3ECF8E"></path>
+                <path d="M48.0248942,10.7028651 L31.64,24.72 L10.56,7.28 L10.56,55.72 C10.56,56.2722847 10.1122847,56.72 9.56,56.72 L1,56.72 C0.44771525,56.72 -9.09427066e-13,56.2722847 -9.09494702e-13,55.72 L-9.09494702e-13,1 C-9.09562337e-13,0.44771525 0.44771525,1.13788291e-13 1,1.13686838e-13 L14.56,1.13686838e-13 L14.56,1.13686838e-13 L31.6,14.96 L48.24,1.13686838e-13 L48.0248942,10.7028651 Z" id="M" fill-opacity="0.25" fill="url(#linearGradient-1)"></path>
+                <path d="M63.0248942,26.7028651 L46.64,40.72 L25.56,23.28 L25.56,55.72 C25.56,56.2722847 25.1122847,56.72 24.56,56.72 L16,56.72 C15.4477153,56.72 15,56.2722847 15,55.72 L15,16 L15,16 L15,1 C15,0.44771525 15.4477153,4.72612372e-13 16,4.72510919e-13 L25.56,4.72510919e-13 L25.56,4.72510919e-13 L25.56,12.4583456 L46.6,30.96 L63.24,16 L63.0248942,26.7028651 Z" id="M" fill="#FFFFFF" transform="translate(39.120000, 28.360000) scale(-1, 1) translate(-39.120000, -28.360000) "></path>
+                <path d="M63.0248942,26.7028651 L46.64,40.72 L25.56,23.28 L25.56,55.72 C25.56,56.2722847 25.1122847,56.72 24.56,56.72 L16,56.72 C15.4477153,56.72 15,56.2722847 15,55.72 L15,16 L15,16 L15,1 C15,0.44771525 15.4477153,1.78650215e-14 16,1.77635684e-14 L25.56,1.77635684e-14 L25.56,1.77635684e-14 L25.56,12.4583456 L46.6,30.96 L63.24,16 L63.0248942,26.7028651 Z" id="M" fill-opacity="0.25" fill="url(#linearGradient-2)" transform="translate(39.120000, 28.360000) scale(-1, 1) translate(-39.120000, -28.360000) "></path>
+            </g>
+            <text id="Meme-maker" font-family="CircularStd-Bold, Circular Std" font-size="50" font-weight="bold" letter-spacing="-0.2" fill="#FFFFFF">
+                <tspan x="89.125" y="50">Meme maker</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

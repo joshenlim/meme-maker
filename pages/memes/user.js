@@ -7,7 +7,6 @@ import { getUserMemes, deleteMeme } from '../../utils/supabaseClient'
 import { splitIntoColumns } from '../../utils/layout'
 
 const UserMemes = ({ user, onExpandMeme }) => {
-
   const [loading, setLoading] = useState(true)
   const [loadAnimations, setLoadAnimations] = useState(false)
   const [memes, setMemes] = useState([])
@@ -37,40 +36,40 @@ const UserMemes = ({ user, onExpandMeme }) => {
     setMemeToDelete(null)
   }
 
-  const onSelectEditMeme = (meme) => {
-    
-  }
+  const onSelectEditMeme = (meme) => {}
 
   return !user ? (
-    <div className="py-10 flex flex-col items-center justify-center space-y-4" style={{ height: 'calc(100vh - 64px)'}}>
+    <div
+      className="py-10 flex flex-col items-center justify-center space-y-4"
+      style={{ height: 'calc(100vh - 64px)' }}
+    >
       <div className="relative">
         <img className="w-[400px]" src="/img/you-shall-not-pass.png" />
         <p
-          className={`text-white absolute transition delay-500 translate-x-16 ${loadAnimations ? 'opacity-100 -translate-y-14' : 'opacity-0 -translate-y-12'}`}
+          className={`text-white absolute transition delay-500 translate-x-16 ${
+            loadAnimations ? 'opacity-100 -translate-y-14' : 'opacity-0 -translate-y-12'
+          }`}
           style={{
             fontFamily: 'Impact',
             fontSize: '2rem',
             WebkitTextStrokeWidth: '2px',
-            WebkitTextStrokeColor: '#000000'
+            WebkitTextStrokeColor: '#000000',
           }}
         >
           YOU SHALL NOT PASS
         </p>
       </div>
-      <Typography>Log in first to view your saved memes or...</Typography>
+      <Typography>Log in to view your saved memes or...</Typography>
       <Button>
-        <Link href='/'>
-          <a>
-            Create some memes first! 
-          </a>
+        <Link href="/">
+          <a>Create some memes first!</a>
         </Link>
       </Button>
     </div>
   ) : (
     <>
-      <div className="relative py-10" style={{ height: 'calc(100vh - 64px)'}}>
+      <div className="relative py-10" style={{ height: 'calc(100vh - 64px)' }}>
         <div className="max-w-screen-xl h-full mx-auto flex flex-col space-y-4">
-          
           {loading ? (
             <div className="w-full h-full flex flex-col items-center justify-center space-y-4">
               <Typography>
@@ -88,10 +87,8 @@ const UserMemes = ({ user, onExpandMeme }) => {
                 <div className="flex items-center justify-end">
                   {R.pathOr([], [0], memes).length > 0 && (
                     <Button>
-                      <Link href='/'>
-                        <a>
-                          Make more memes! 
-                        </a>
+                      <Link href="/">
+                        <a>Make more memes!</a>
                       </Link>
                     </Button>
                   )}
@@ -102,39 +99,47 @@ const UserMemes = ({ user, onExpandMeme }) => {
                   <img className="w-[150px]" src="/img/polite-cat.png" />
                   <Typography>You don't have any saved memes yet</Typography>
                   <Button>
-                    <Link href='/'>
-                      <a>
-                        Create some memes first! 
-                      </a>
+                    <Link href="/">
+                      <a>Create some memes first!</a>
                     </Link>
                   </Button>
                 </div>
               )}
               <div className="overflow-y-auto">
                 <div className="grid grid-cols-5 gap-6">
-                  {R.addIndex(R.map)((content, idx) => (
-                    <div key={idx} className="space-y-6">
-                      {R.map((meme) => (
-                        <div key={meme.id} className="w-full relative group cursor-pointer">
-                          <img className="rounded-md w-full" src={meme.url} onClick={() => onExpandMeme(meme)} />
-                          <div className="flex flex-col absolute top-2 right-2 transition opacity-0 group-hover:opacity-100 space-y-2">
-                            {/* <div
+                  {R.addIndex(R.map)(
+                    (content, idx) => (
+                      <div key={idx} className="space-y-6">
+                        {R.map(
+                          (meme) => (
+                            <div key={meme.id} className="w-full relative group cursor-pointer">
+                              <img
+                                className="rounded-md w-full"
+                                src={meme.url}
+                                onClick={() => onExpandMeme(meme)}
+                              />
+                              <div className="flex flex-col absolute top-2 right-2 transition opacity-0 group-hover:opacity-100 space-y-2">
+                                {/* <div
                               className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
                               onClick={() => onSelectEditMeme(meme)}
                             >
                               <IconEdit className="w-4" strokeWidth={2} />
                             </div> */}
-                            <div
-                              className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
-                              onClick={() => onSelectDeleteMeme(meme)}
-                            >
-                              <IconTrash className="w-4" strokeWidth={2} />
+                                <div
+                                  className="w-8 h-8 rounded-md bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+                                  onClick={() => onSelectDeleteMeme(meme)}
+                                >
+                                  <IconTrash className="w-4" strokeWidth={2} />
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      ), content)}
-                    </div>
-                  ), memes)}
+                          ),
+                          content
+                        )}
+                      </div>
+                    ),
+                    memes
+                  )}
                 </div>
               </div>
             </>
