@@ -77,12 +77,18 @@ function MyApp({ Component, pageProps }) {
           <title>Meme Maker | Supabase</title>
           <meta property="og:title" content="Meme Maker | Supabase" />
           <meta property="og:description" content="Create your best memes in seconds" />
-          <meta property="og:image" content="/img/og-image.png" />
+          <meta
+            property="og:image"
+            content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
+          />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:creator" content="joshenlimek" />
           <meta property="twitter:title" content="Meme Maker | Supabase" />
           <meta property="twitter:description" content="Create your best memes in seconds" />
-          <meta property="twitter:image" content="/img/og-image.png" />
+          <meta
+            property="twitter:image"
+            content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
+          />
           <link rel="icon" href="/favicon.ico" />
           <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
         </Head>
