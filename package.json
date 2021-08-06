@@ -10,6 +10,7 @@
     "@radix-ui/react-portal": "^0.0.14",
     "@supabase/supabase-js": "^1.21.0",
     "@supabase/ui": "^0.31.0",
+    "canvas-confetti": "^1.4.0",
     "fabric": "^4.5.1",
     "next": "latest",
     "ramda": "^0.27.1",

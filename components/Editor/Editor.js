@@ -12,6 +12,7 @@ import {
 } from '@supabase/ui'
 import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
+import confetti from 'canvas-confetti'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
 import { resizeImageToCanvas, getCanvasJson, dataURLtoFile } from '../../utils/editor'
 import { getSignedUrl, saveDefaultTemplate, saveUserTemplate } from '../../utils/supabaseClient'
@@ -290,6 +291,16 @@ const Editor = ({
     document.body.appendChild(link)
     link.click()
     link.parentNode.removeChild(link)
+    
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    confetti({
+      spread: randomInRange(50, 70),
+      particleCount: randomInRange(50, 100),
+      origin: { y: 0.6 }
+    });
     return toast.success('Enjoy your meme!', { icon: '🥳' })
   }
 
