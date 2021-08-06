@@ -15,6 +15,7 @@ A project built for [Supabase's Hackathon]('https://supabase.io/blog/2021/07/30/
 - View all memes created by everyone
 
 ## Additional features I'd have added
+- Definitely more templates
 - Allow users to edit their saved memes
 - Add more community features like liking memes and a "Meme of the Month" title
 - Show trending templates that are being used

@@ -2,6 +2,7 @@ import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { Toaster, toast } from 'react-hot-toast'
 import * as Portal from '@radix-ui/react-portal'
 import * as R from 'ramda'
@@ -13,8 +14,18 @@ import { getSession, getUser, signOut } from '../utils/supabaseClient'
 import { IconGitHub, Typography } from '@supabase/ui'
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter()
+
   useEffect(() => {
     document.body.className = 'dark'
+
+    if (router.asPath.includes('access_token')) {
+      setTimeout(() => {
+        const sessionUser = getUser()
+        if (sessionUser) setUser(sessionUser)
+      }, 200)
+      return toast.success('Successfully confirmed email - welcome!', { icon: '😎' })
+    }
 
     const session = getSession()
     if (session) {
