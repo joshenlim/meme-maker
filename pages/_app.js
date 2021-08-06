@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Toaster, toast } from 'react-hot-toast'
 import * as Portal from '@radix-ui/react-portal'
+import { IdProvider } from '@radix-ui/react-id'
 import * as R from 'ramda'
 
 import Header from '../components/Header/Header'
@@ -70,63 +71,65 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <div className="bg-gray-800 relative">
-      <Head>
-        <title>Meme Maker | Supabase</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-      </Head>
-      <Header
-        user={user}
-        isAdmin={isAdmin}
-        onSelectLogOut={onSelectLogOut}
-        onSelectLogIn={onSelectLogIn}
-      />
-      <Component {...pageProps} user={user} onExpandMeme={onExpandMeme} />
-      <LogInModal
-        visible={showLogInModal}
-        onLoginSuccess={onLoginSuccess}
-        onCloseModal={() => setShowLogInModal(false)}
-      />
-      <ExpandMemeModal
-        visible={!R.isNil(expandedMeme)}
-        meme={expandedMeme}
-        onCloseModal={() => setExpandedMeme(null)}
-      />
-      <footer className="flex items-center space-x-4 absolute bottom-0 p-6">
-        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-600">
-          <a href="https://github.com/joshenlim/meme-maker" target="_blank">
-            <Typography>
-              <IconGitHub className="w-4 h-4" strokeWidth={2} />
-            </Typography>
-          </a>
-        </div>
-        <Typography.Text>
-          Powered by {' '}
-          <a
-            className="text-green-600 hover:text-green-400 transition"
-            href="https://supabase.io"
-            target="_blank"
-          >
-            Supabase
-          </a>
-        </Typography.Text>
-      </footer>
-      <Portal.Root className="portal--toast">
-        <Toaster
-          toastOptions={{
-            className:
-              'dark:bg-bg-primary-dark dark:text-typography-body-strong-dark border border-gray-500',
-            style: {
-              padding: '8px',
-              paddingLeft: '16px',
-              paddingRight: '16px',
-              fontSize: '0.875rem',
-            },
-          }}
+    <IdProvider>
+      <div className="bg-gray-800 relative">
+        <Head>
+          <title>Meme Maker | Supabase</title>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+        </Head>
+        <Header
+          user={user}
+          isAdmin={isAdmin}
+          onSelectLogOut={onSelectLogOut}
+          onSelectLogIn={onSelectLogIn}
         />
-      </Portal.Root>
-    </div>
+        <Component {...pageProps} user={user} onExpandMeme={onExpandMeme} />
+        <LogInModal
+          visible={showLogInModal}
+          onLoginSuccess={onLoginSuccess}
+          onCloseModal={() => setShowLogInModal(false)}
+        />
+        <ExpandMemeModal
+          visible={!R.isNil(expandedMeme)}
+          meme={expandedMeme}
+          onCloseModal={() => setExpandedMeme(null)}
+        />
+        <footer className="flex items-center space-x-4 absolute bottom-0 p-6">
+          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-600">
+            <a href="https://github.com/joshenlim/meme-maker" target="_blank">
+              <Typography>
+                <IconGitHub className="w-4 h-4" strokeWidth={2} />
+              </Typography>
+            </a>
+          </div>
+          <Typography.Text>
+            Powered by{' '}
+            <a
+              className="text-green-600 hover:text-green-400 transition"
+              href="https://supabase.io"
+              target="_blank"
+            >
+              Supabase
+            </a>
+          </Typography.Text>
+        </footer>
+        <Portal.Root className="portal--toast">
+          <Toaster
+            toastOptions={{
+              className:
+                'dark:bg-bg-primary-dark dark:text-typography-body-strong-dark border border-gray-500',
+              style: {
+                padding: '8px',
+                paddingLeft: '16px',
+                paddingRight: '16px',
+                fontSize: '0.875rem',
+              },
+            }}
+          />
+        </Portal.Root>
+      </div>
+    </IdProvider>
   )
 }
 

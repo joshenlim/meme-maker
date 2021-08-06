@@ -7,6 +7,7 @@
     "prettier": "prettier --write \"./{pages,components,lib,stores,styles,tests}/**/*.{md,js,jsx,json}\""
   },
   "dependencies": {
+    "@radix-ui/react-id": "^0.0.6",
     "@radix-ui/react-portal": "^0.0.14",
     "@supabase/supabase-js": "^1.21.0",
     "@supabase/ui": "^0.31.0",
