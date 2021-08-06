@@ -75,16 +75,22 @@ function MyApp({ Component, pageProps }) {
       <div className="bg-gray-800 relative">
         <Head>
           <title>Meme Maker | Supabase</title>
-          <meta property="og:title" content="Meme Maker | Supabase" />
-          <meta property="og:description" content="Create your best memes in seconds" />
+          <meta property="og:title" content="Meme Maker | Powered by Supabase" />
+          <meta
+            property="og:description"
+            content="Create your best memes in seconds with this simple canvas editor."
+          />
           <meta
             property="og:image"
             content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
           />
           <meta property="twitter:card" content="summary_large_image" />
           <meta property="twitter:creator" content="joshenlimek" />
-          <meta property="twitter:title" content="Meme Maker | Supabase" />
-          <meta property="twitter:description" content="Create your best memes in seconds" />
+          <meta property="twitter:title" content="Meme Maker | Powered by Supabase" />
+          <meta
+            property="twitter:description"
+            content="Create your best memes in seconds with this simple canvas editor."
+          />
           <meta
             property="twitter:image"
             content="https://mfrkmguhoejspftfvgdz.supabase.in/storage/v1/object/public/og-assets/og-image.png"
