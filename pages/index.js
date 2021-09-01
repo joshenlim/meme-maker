@@ -126,14 +126,6 @@ const Home = ({ user }) => {
           onFilesUpload={onFilesUpload}
           hideTemplatesPanel={() => setShowTemplatesPanel(false)}
         />
-        <div
-          className="block sm:hidden absolute bottom-0 right-0 p-7"
-          onClick={() => setShowHelpModal(true)}
-        >
-          <Typography>
-            <IconHelpCircle size={25} strokeWidth={2} />
-          </Typography>
-        </div>
         <div className="hidden sm:flex justify-end absolute bottom-0 right-0 group">
           <div
             className={`-translate-x-20 ${
