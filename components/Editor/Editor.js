@@ -84,8 +84,30 @@ const Editor = ({
         const objects = editorRef.current.getObjects()
         const [backgroundObject] = objects.filter((object) => object.isBackground)
         backgroundObject.set({ selectable: false, evented: false })
-        editorRef.current.setWidth(backgroundObject.width * backgroundObject.scaleX)
-        editorRef.current.setHeight(backgroundObject.height * backgroundObject.scaleY)
+
+        if (isMobile) {
+          // We added some mobile responsiveness support in retrospect, hence we
+          // need to resize the saved templates cause they were configured on large screens
+          if (backgroundObject.width >= backgroundObject.height) {
+            const zoomScale =
+              editorDimensions.width / (backgroundObject.width * backgroundObject.scaleX)
+            editorRef.current.setZoom(zoomScale)
+            editorRef.current.setHeight(
+              backgroundObject.height * backgroundObject.scaleY * zoomScale
+            )
+            editorRef.current.setWidth(editorDimensions.width)
+          } else if (backgroundObject.width < backgroundObject.height) {
+            const zoomScale =
+              editorDimensions.height / (backgroundObject.height * backgroundObject.scaleY)
+            editorRef.current.setZoom(zoomScale)
+            editorRef.current.setHeight(editorDimensions.height)
+            editorRef.current.setWidth(backgroundObject.width * backgroundObject.scaleX * zoomScale)
+          }
+        } else {
+          editorRef.current.setWidth(backgroundObject.width * backgroundObject.scaleX)
+          editorRef.current.setHeight(backgroundObject.height * backgroundObject.scaleY)
+        }
+
         editorRef.current.requestRenderAll()
       })
     }

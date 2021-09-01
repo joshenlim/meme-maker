@@ -77,7 +77,10 @@ const Home = ({ user }) => {
         <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
           <main className="flex flex-col items-center justify-center w-full flex-1 px-4 sm:px-20 text-center text-white">
             <div className="pt-4 mb-4 sm:pt-6 sm:mb-2">
-              <Typography.Title className="font-medium bg-center bg-no-repeat bg-cover" level={2}>
+              <Typography.Title
+                className="hidden sm:block font-medium bg-center bg-no-repeat bg-cover"
+                level={2}
+              >
                 Create your{' '}
                 <span
                   className="bg-center bg-no-repeat bg-cover"
@@ -89,10 +92,28 @@ const Home = ({ user }) => {
                       "url('https://i.giphy.com/media/2tNvsKkc0qFdNhJmKk/giphy.webp')",
                   }}
                 >
-                  <br className="sm:hidden" />
                   best memes
-                  <br className="sm:hidden" />
                 </span>{' '}
+                within seconds
+              </Typography.Title>
+              <Typography.Title
+                className="sm:hidden font-medium bg-center bg-no-repeat bg-cover"
+                level={3}
+              >
+                Create your{' '}
+                <span
+                  className="bg-center bg-no-repeat bg-cover"
+                  style={{
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    backgroundImage:
+                      "url('https://i.giphy.com/media/2tNvsKkc0qFdNhJmKk/giphy.webp')",
+                  }}
+                >
+                  best memes
+                </span>{' '}
+                <br />
                 within seconds
               </Typography.Title>
             </div>
