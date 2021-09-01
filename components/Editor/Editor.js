@@ -29,10 +29,9 @@ import {
 } from '../EditorControls'
 import toast from 'react-hot-toast'
 
-const EDITOR_DIMENSIONS = { width: 800, height: 450 }
-
 const Editor = ({
   user,
+  isMobile = false,
   isAdmin = false,
   stickers = [],
   selectedTemplate = null,
@@ -41,6 +40,11 @@ const Editor = ({
   onFilesUpload = () => {},
   onSelectChangeTemplate = () => {},
 }) => {
+  const editorDimensions = {
+    width: isMobile ? 400 : 800,
+    height: isMobile ? 400 : 450,
+  }
+
   const editorRef = useRef(null)
   const copiedObject = useRef(null)
 
@@ -229,15 +233,15 @@ const Editor = ({
       url,
       (img) => {
         const imageDimensions = { width: img.width, height: img.height }
-        const scale = resizeImageToCanvas(imageDimensions, EDITOR_DIMENSIONS)
+        const scale = resizeImageToCanvas(imageDimensions, editorDimensions)
 
         // Resize the canvas to fit the background snuggly so that we do not export
         // with any whitespace
         // [TODO] Small bug - uploading drake meme, followed by communist bugs meme
         // The canvas resizing isn't updating properly
-        if (EDITOR_DIMENSIONS.width > img.width * scale) {
+        if (editorDimensions.width > img.width * scale) {
           editorRef.current.setWidth(img.width * scale)
-        } else if (EDITOR_DIMENSIONS.height > img.height * scale) {
+        } else if (editorDimensions.height > img.height * scale) {
           editorRef.current.setHeight(img.height * scale)
         }
         editorRef.current.calcOffset()
@@ -291,22 +295,22 @@ const Editor = ({
     document.body.appendChild(link)
     link.click()
     link.parentNode.removeChild(link)
-    
+
     function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
+      return Math.random() * (max - min) + min
     }
 
     confetti({
       spread: randomInRange(50, 70),
       particleCount: randomInRange(50, 100),
-      origin: { y: 0.6 }
-    });
+      origin: { y: 0.6 },
+    })
     return toast.success('Enjoy your meme!', { icon: '🥳' })
   }
 
   return (
     <div className="flex flex-col items-center space-y-3">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 items-center justify-between">
         {isTextObjectSelected ? (
           <div className="flex items-center space-x-2">
             <FontFamily
@@ -336,7 +340,7 @@ const Editor = ({
         )}
 
         {!isCanvasEmpty ? (
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <div className="flex items-center space-x-2">
               {!R.isNil(selectedObject) && (
                 <LayerOrder
@@ -364,7 +368,7 @@ const Editor = ({
 
       <div
         className="border border-gray-500 rounded-md flex items-center justify-center relative"
-        style={{ width: EDITOR_DIMENSIONS.width }}
+        style={{ width: editorDimensions.width }}
       >
         {isCanvasEmpty && (
           <EmptyState
@@ -373,7 +377,7 @@ const Editor = ({
             onSelectChangeTemplate={onSelectChangeTemplate}
           />
         )}
-        <canvas id="editor" width={EDITOR_DIMENSIONS.width} height={EDITOR_DIMENSIONS.height} />
+        <canvas id="editor" width={editorDimensions.width} height={editorDimensions.height} />
       </div>
 
       {!isCanvasEmpty && (

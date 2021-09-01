@@ -12,6 +12,8 @@ const UserMemes = ({ user, onExpandMeme }) => {
   const [memes, setMemes] = useState([])
   const [memeToDelete, setMemeToDelete] = useState(null)
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 500
+
   useEffect(() => {
     if (user) {
       getMemes()
@@ -20,8 +22,9 @@ const UserMemes = ({ user, onExpandMeme }) => {
   }, [user])
 
   const getMemes = async () => {
+    const columns = isMobile ? 2 : 5
     const userMemes = await getUserMemes(user)
-    const formattedMemes = splitIntoColumns(userMemes, 5)
+    const formattedMemes = splitIntoColumns(userMemes, columns)
     setMemes(formattedMemes)
     setLoading(false)
   }
@@ -44,9 +47,9 @@ const UserMemes = ({ user, onExpandMeme }) => {
       style={{ height: 'calc(100vh - 64px)' }}
     >
       <div className="relative">
-        <img className="w-[400px]" src="/img/you-shall-not-pass.png" />
+        <img className="w-[300px] sm:w-[400px]" src="/img/you-shall-not-pass.png" />
         <p
-          className={`text-white absolute transition delay-500 translate-x-16 ${
+          className={`text-white absolute transition delay-500 translate-x-5 sm:translate-x-16 ${
             loadAnimations ? 'opacity-100 -translate-y-14' : 'opacity-0 -translate-y-12'
           }`}
           style={{
@@ -68,7 +71,7 @@ const UserMemes = ({ user, onExpandMeme }) => {
     </div>
   ) : (
     <>
-      <div className="relative py-10" style={{ height: 'calc(100vh - 64px)' }}>
+      <div className="relative px-4 py-10" style={{ height: 'calc(100vh - 64px)' }}>
         <div className="max-w-screen-xl h-full mx-auto flex flex-col space-y-4">
           {loading ? (
             <div className="w-full h-full flex flex-col items-center justify-center space-y-4">
@@ -80,15 +83,15 @@ const UserMemes = ({ user, onExpandMeme }) => {
           ) : (
             <>
               <div className="grid grid-cols-3 mb-4">
-                <div />
-                <div className="flex items-center justify-center">
+                <div className="hidden sm:block" />
+                <div className="flex items-center sm:justify-center col-span-2 sm:col-span-1">
                   <Typography.Title level={3}>Your Saved Memes</Typography.Title>
                 </div>
                 <div className="flex items-center justify-end">
                   {R.pathOr([], [0], memes).length > 0 && (
                     <Button>
                       <Link href="/">
-                        <a>Make more memes!</a>
+                        <a>{isMobile ? 'Make memes!' : 'Make more memes!'}</a>
                       </Link>
                     </Button>
                   )}
@@ -106,7 +109,7 @@ const UserMemes = ({ user, onExpandMeme }) => {
                 </div>
               )}
               <div className="overflow-y-auto">
-                <div className="grid grid-cols-5 gap-6">
+                <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} gap-6`}>
                   {R.addIndex(R.map)(
                     (content, idx) => (
                       <div key={idx} className="space-y-6">

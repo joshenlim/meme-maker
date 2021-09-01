@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Typography, IconLoader, IconHeart } from '@supabase/ui'
+import { Button, Typography, IconLoader } from '@supabase/ui'
 import Link from 'next/link'
 import * as R from 'ramda'
 import { splitIntoColumns } from '../../utils/layout'
@@ -9,19 +9,22 @@ const CommunityMemes = ({ onExpandMeme = () => {} }) => {
   const [loading, setLoading] = useState(true)
   const [memes, setMemes] = useState([])
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 500
+
   useEffect(() => {
     getMemes()
   }, [])
 
   const getMemes = async () => {
+    const columns = isMobile ? 2 : 5
     const communityMemes = await getCommunityMemes()
-    const formattedMemes = splitIntoColumns(communityMemes, 5)
+    const formattedMemes = splitIntoColumns(communityMemes, columns)
     setMemes(formattedMemes)
     setLoading(false)
   }
 
   return (
-    <div className="relative py-10" style={{ height: 'calc(100vh - 64px)' }}>
+    <div className="relative px-4 py-10" style={{ height: 'calc(100vh - 64px)' }}>
       <div className="max-w-screen-xl h-full mx-auto flex flex-col space-y-4">
         {loading ? (
           <div className="w-full h-full flex flex-col items-center justify-center space-y-4">
@@ -33,22 +36,22 @@ const CommunityMemes = ({ onExpandMeme = () => {} }) => {
         ) : (
           <>
             <div className="grid grid-cols-3 mb-4">
-              <div />
-              <div className="flex items-center justify-center">
+              <div className="hidden sm:block" />
+              <div className="flex items-center sm:justify-center col-span-2 sm:col-span-1">
                 <Typography.Title level={3}>Community Memes</Typography.Title>
               </div>
               <div className="flex items-center justify-end">
                 {R.pathOr([], [0], memes).length > 0 && (
                   <Button>
                     <Link href="/">
-                      <a>Make your own memes!</a>
+                      <a>{isMobile ? 'Make memes!' : 'Make your own memes!'}</a>
                     </Link>
                   </Button>
                 )}
               </div>
             </div>
             <div className="overflow-y-auto">
-              <div className="grid grid-cols-5 gap-6">
+              <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} gap-6`}>
                 {R.addIndex(R.map)(
                   (content, idx) => (
                     <div key={idx} className="space-y-6">

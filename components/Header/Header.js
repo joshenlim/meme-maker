@@ -13,16 +13,16 @@ const Header = ({ user, isAdmin = false, onSelectLogOut = () => {}, onSelectLogI
   }
 
   return (
-    <div className="flex items-center w-full h-16 border-b border-gray-600">
+    <div className="flex items-center w-full h-16 border-b border-gray-600 px-4">
       <div className="max-w-screen-xl w-full flex items-center justify-between mx-auto">
         <Link href="/">
           <a>
             <img className="h-5 w-auto" src="/img/logo.svg" alt="" />
           </a>
         </Link>
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4 sm:space-x-6">
           {user && (
-            <div className="flex flex-col text-right">
+            <div className="hidden sm:flex flex-col text-right">
               <Typography.Text className="opacity-50 !text-[12px]">Logged in as:</Typography.Text>
               <Typography.Text className="!text-[12px]">
                 {isAdmin && <Badge>Admin</Badge>}

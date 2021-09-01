@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Typography } from '@supabase/ui'
+import { IconHelpCircle, Typography } from '@supabase/ui'
 import Image from 'next/image'
 
 import Editor from '../components/Editor/Editor'
@@ -28,6 +28,7 @@ const Home = ({ user }) => {
   const [showTemplatesPanel, setShowTemplatesPanel] = useState(false)
   const [showHelpModal, setShowHelpModal] = useState(false)
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 500
   const isAdmin = R.pathOr('', ['email'], user).includes('@supabase.io')
 
   useEffect(() => {
@@ -74,8 +75,8 @@ const Home = ({ user }) => {
     <>
       <div className="relative overflow-hidden" style={{ height: 'calc(100vh - 64px)' }}>
         <div className="max-w-screen-xl mx-auto flex-grow flex flex-col">
-          <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center text-white">
-            <div className="pt-6 mb-2">
+          <main className="flex flex-col items-center justify-center w-full flex-1 px-4 sm:px-20 text-center text-white">
+            <div className="pt-4 mb-4 sm:pt-6 sm:mb-2">
               <Typography.Title className="font-medium bg-center bg-no-repeat bg-cover" level={2}>
                 Create your{' '}
                 <span
@@ -88,27 +89,32 @@ const Home = ({ user }) => {
                       "url('https://i.giphy.com/media/2tNvsKkc0qFdNhJmKk/giphy.webp')",
                   }}
                 >
+                  <br className="sm:hidden" />
                   best memes
+                  <br className="sm:hidden" />
                 </span>{' '}
                 within seconds
               </Typography.Title>
             </div>
-            <div className="pb-4">
+            <div className="pb-4 hidden sm:block">
               <Typography>
                 Here at Supabase we love memes - and so here's a meme maker 💚
               </Typography>
             </div>
-            <Editor
-              user={user}
-              isAdmin={isAdmin}
-              stickers={stickers}
-              templates={templates}
-              selectedTemplate={selectedTemplate}
-              uploading={uploading}
-              uploadedFileUrl={uploadedFileUrl}
-              onFilesUpload={onFilesUpload}
-              onSelectChangeTemplate={onSelectChangeTemplate}
-            />
+            {typeof window !== 'undefined' && (
+              <Editor
+                user={user}
+                isMobile={isMobile}
+                isAdmin={isAdmin}
+                stickers={stickers}
+                templates={templates}
+                selectedTemplate={selectedTemplate}
+                uploading={uploading}
+                uploadedFileUrl={uploadedFileUrl}
+                onFilesUpload={onFilesUpload}
+                onSelectChangeTemplate={onSelectChangeTemplate}
+              />
+            )}
           </main>
         </div>
         <TemplatesPanel
@@ -120,7 +126,15 @@ const Home = ({ user }) => {
           onFilesUpload={onFilesUpload}
           hideTemplatesPanel={() => setShowTemplatesPanel(false)}
         />
-        <div className="flex justify-end absolute bottom-0 right-0 group">
+        <div
+          className="block sm:hidden absolute bottom-0 right-0 p-7"
+          onClick={() => setShowHelpModal(true)}
+        >
+          <Typography>
+            <IconHelpCircle size={25} strokeWidth={2} />
+          </Typography>
+        </div>
+        <div className="hidden sm:flex justify-end absolute bottom-0 right-0 group">
           <div
             className={`-translate-x-20 ${
               loadAnimations ? 'translate-y-36' : 'translate-y-64'

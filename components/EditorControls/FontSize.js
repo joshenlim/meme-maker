@@ -6,7 +6,7 @@ const FontSize = ({ selectedObject = {}, updateTextAttribute = () => {} }) => {
     <div className="flex items-center">
       <div
         className="rounded-l-md border border-gray-500 border-r-0 p-2 h-full cursor-pointer transition hover:bg-gray-500"
-        onClick={() => updateTextAttribute({ fontSize: selectedObject.fontSize - 1 })}
+        onClick={() => updateTextAttribute({ fontSize: Number(selectedObject.fontSize) - 1 })}
       >
         <IconMinus size="medium" strokeWidth={2} />
       </div>
@@ -18,7 +18,7 @@ const FontSize = ({ selectedObject = {}, updateTextAttribute = () => {} }) => {
       />
       <div
         className="rounded-r-md border border-gray-500 border-l-0 p-2 h-full cursor-pointer transition hover:bg-gray-500"
-        onClick={() => updateTextAttribute({ fontSize: selectedObject.fontSize + 1 })}
+        onClick={() => updateTextAttribute({ fontSize: Number(selectedObject.fontSize) + 1 })}
       >
         <IconPlus size="medium" strokeWidth={2} />
       </div>
