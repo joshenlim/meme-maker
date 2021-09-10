@@ -22,6 +22,7 @@ import {
   FontSize,
   FontFamily,
   LayerOrder,
+  Remove,
   StickerSelection,
   TextAlign,
   TextFillColour,
@@ -236,6 +237,11 @@ const Editor = ({
     )
   }
 
+  const removeObject = () => {
+    const activeObject = editorRef.current.getActiveObject()
+    editorRef.current.remove(activeObject)
+  }
+
   const shiftObjectForward = () => {
     const activeObject = editorRef.current.getActiveObject()
     editorRef.current.bringForward(activeObject)
@@ -343,19 +349,24 @@ const Editor = ({
 
             <FontSize selectedObject={selectedObject} updateTextAttribute={updateTextAttribute} />
 
-            <TextFillColour
-              swatches={DEFAULT_SWATCHES}
-              selectedObject={selectedObject}
-              updateTextAttribute={updateTextAttribute}
-            />
+            <div className="flex items-center space-x-1">
+              <TextFillColour
+                swatches={DEFAULT_SWATCHES}
+                selectedObject={selectedObject}
+                updateTextAttribute={updateTextAttribute}
+              />
 
-            <TextStrokeColour
-              swatches={DEFAULT_SWATCHES}
-              selectedObject={selectedObject}
-              updateTextAttribute={updateTextAttribute}
-            />
+              <TextStrokeColour
+                swatches={DEFAULT_SWATCHES}
+                selectedObject={selectedObject}
+                updateTextAttribute={updateTextAttribute}
+              />
 
-            <TextAlign selectedObject={selectedObject} updateTextAttribute={updateTextAttribute} />
+              <TextAlign
+                selectedObject={selectedObject}
+                updateTextAttribute={updateTextAttribute}
+              />
+            </div>
           </div>
         ) : (
           <div />
@@ -363,13 +374,14 @@ const Editor = ({
 
         {!isCanvasEmpty ? (
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               {!R.isNil(selectedObject) && (
                 <LayerOrder
                   shiftObjectForward={shiftObjectForward}
                   shiftObjectBackward={shiftObjectBackward}
                 />
               )}
+              {!R.isNil(selectedObject) && <Remove onRemoveObject={removeObject} />}
               <StickerSelection stickers={stickers} onAddSticker={addSticker} />
               <div className="h-10 flex">
                 <Button
