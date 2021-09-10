@@ -14,8 +14,18 @@ import { useEffect, useState, useRef } from 'react'
 import * as R from 'ramda'
 import confetti from 'canvas-confetti'
 import { DEFAULT_SWATCHES, DEFAULT_FONTS } from './constants'
-import { resizeImageToCanvas, getCanvasJson, dataURLtoFile } from '../../utils/editor'
-import { getSignedUrl, saveDefaultTemplate, saveUserTemplate } from '../../utils/supabaseClient'
+import {
+  resizeImageToFitCanvas,
+  resizeImageWithinCanvas,
+  getCanvasJson,
+  dataURLtoFile,
+} from '../../utils/editor'
+import {
+  getSignedUrl,
+  saveDefaultTemplate,
+  saveUserTemplate,
+  uploadFile,
+} from '../../utils/supabaseClient'
 
 import EmptyState from './EmptyState'
 import {
@@ -30,6 +40,8 @@ import {
 } from '../EditorControls'
 import toast from 'react-hot-toast'
 
+const STICKERS_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_STICKERS_BUCKET
+
 const Editor = ({
   user,
   isMobile = false,
@@ -38,7 +50,7 @@ const Editor = ({
   selectedTemplate = null,
   uploadedFileUrl = '',
   uploading = false,
-  onFilesUpload = () => {},
+  onTemplateUpload = () => {},
   onSelectChangeTemplate = () => {},
 }) => {
   const editorDimensions = {
@@ -48,6 +60,7 @@ const Editor = ({
 
   const editorRef = useRef(null)
   const copiedObject = useRef(null)
+  const uploadStickerButtonRef = useRef(null)
 
   const [name, setName] = useState('')
   const [selectedObject, setSelectedObject] = useState(null)
@@ -220,21 +233,44 @@ const Editor = ({
   }
 
   const addSticker = async (sticker) => {
-    const stickerUrl = await getSignedUrl('stickers', sticker.path)
+    const stickerUrl = await getSignedUrl(STICKERS_BUCKET, sticker.path)
     fabric.Image.fromURL(
       stickerUrl,
       (img) => {
+        const imageDimensions = { width: img.width, height: img.height }
+        const editorDimensions = {
+          width: editorRef.current.width,
+          height: editorRef.current.height,
+        }
+        const scale = resizeImageWithinCanvas(imageDimensions, editorDimensions)
         img.set({
           left: editorRef.current.width / 2,
           top: editorRef.current.height / 2,
           originX: 'center',
           originY: 'center',
+          scaleX: scale,
+          scaleY: scale,
         })
         editorRef.current.add(img)
         editorRef.current.setActiveObject(img)
       },
       { crossOrigin: 'anonymous' }
     )
+  }
+
+  const onSelectUploadSticker = () => {
+    if (uploadStickerButtonRef.current) {
+      uploadStickerButtonRef.current.click()
+    }
+  }
+
+  const uploadSticker = async (event) => {
+    event.persist()
+    const files = event.target.files
+    const key = await uploadFile(files[0], user, STICKERS_BUCKET)
+    const formattedKey = key.split('/').slice(1).join('/')
+    await addSticker({ path: formattedKey })
+    event.target.value = ''
   }
 
   const removeObject = () => {
@@ -261,7 +297,7 @@ const Editor = ({
       url,
       (img) => {
         const imageDimensions = { width: img.width, height: img.height }
-        const scale = resizeImageToCanvas(imageDimensions, editorDimensions)
+        const scale = resizeImageToFitCanvas(imageDimensions, editorDimensions)
 
         // Resize the canvas to fit the background snuggly so that we do not export
         // with any whitespace
@@ -338,6 +374,14 @@ const Editor = ({
 
   return (
     <div className="flex flex-col items-center space-y-3">
+      <div className="hidden">
+        <input
+          ref={uploadStickerButtonRef}
+          type="file"
+          accept=".png, .jpg, .jpeg"
+          onChange={uploadSticker}
+        />
+      </div>
       <div className="w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 items-center justify-between">
         {isTextObjectSelected ? (
           <div className="flex items-center space-x-2">
@@ -382,7 +426,11 @@ const Editor = ({
                 />
               )}
               {!R.isNil(selectedObject) && <Remove onRemoveObject={removeObject} />}
-              <StickerSelection stickers={stickers} onAddSticker={addSticker} />
+              <StickerSelection
+                stickers={stickers}
+                onAddSticker={addSticker}
+                onSelectUploadSticker={onSelectUploadSticker}
+              />
               <div className="h-10 flex">
                 <Button
                   type="text"
@@ -407,7 +455,7 @@ const Editor = ({
         {isCanvasEmpty && (
           <EmptyState
             uploading={uploading}
-            onFilesUpload={onFilesUpload}
+            onFilesUpload={onTemplateUpload}
             onSelectChangeTemplate={onSelectChangeTemplate}
           />
         )}

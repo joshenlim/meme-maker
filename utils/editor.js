@@ -1,4 +1,4 @@
-export const resizeImageToCanvas = (imageDimensions, canvasDimensions) => {
+export const resizeImageToFitCanvas = (imageDimensions, canvasDimensions) => {
   const isHorizontalImage = imageDimensions.width >= imageDimensions.height
   if (isHorizontalImage) {
     const scale = canvasDimensions.width / imageDimensions.width
@@ -12,6 +12,30 @@ export const resizeImageToCanvas = (imageDimensions, canvasDimensions) => {
       return canvasDimensions.width / imageDimensions.width
     }
     return scale
+  }
+}
+
+export const resizeImageWithinCanvas = (imageDimensions, canvasDimensions) => {
+  const isHorizontalImage = imageDimensions.width >= imageDimensions.height
+  if (isHorizontalImage) {
+    if (imageDimensions.width > canvasDimensions.width) {
+      const scale = canvasDimensions.width / imageDimensions.width
+      if (imageDimensions.height * scale > canvasDimensions.height) {
+        return canvasDimensions.height / imageDimensions.height
+      }
+      return scale - 0.1
+    }
+    return 1
+  } else {
+    if (imageDimensions.height > canvasDimensions.height) {
+      const scale = canvasDimensions.height / imageDimensions.height
+      if (imageDimensions.height * scale > canvasDimensions.height) {
+        return canvasDimensions.height / imageDimensions.height
+      }
+      return scale - 0.1
+    } else {
+      return 1
+    }
   }
 }
 

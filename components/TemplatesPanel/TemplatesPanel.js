@@ -8,7 +8,7 @@ const TemplatesPanel = ({
   uploading = false,
   visible = false,
   loadTemplate = () => {},
-  onFilesUpload = () => {},
+  onTemplateUpload = () => {},
   hideTemplatesPanel = () => {},
 }) => {
   const uploadButtonRef = useRef(null)
@@ -33,7 +33,7 @@ const TemplatesPanel = ({
             ref={uploadButtonRef}
             type="file"
             accept=".png, .jpg, .jpeg"
-            onChange={onFilesUpload}
+            onChange={onTemplateUpload}
           />
         </div>
         <Button block loading={uploading} onClick={onSelectUpload}>

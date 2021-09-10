@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IconHelpCircle, Typography } from '@supabase/ui'
+import { Typography } from '@supabase/ui'
 import Image from 'next/image'
 
 import Editor from '../components/Editor/Editor'
@@ -51,12 +51,12 @@ const Home = ({ user }) => {
     setShowTemplatesPanel(true)
   }
 
-  const onFilesUpload = async (event) => {
+  const onTemplateUpload = async (event) => {
     setUploading(true)
     setSelectedTemplate(null)
     event.persist()
     const files = event.target.files
-    const key = await uploadFile(files[0], user)
+    const key = await uploadFile(files[0], user, TEMPLATES_BUCKET)
     const formattedKey = key.split('/').slice(1).join('/')
     const url = await getSignedUrl(TEMPLATES_BUCKET, formattedKey)
     setUploadedFileUrl(url)
@@ -132,7 +132,7 @@ const Home = ({ user }) => {
                 selectedTemplate={selectedTemplate}
                 uploading={uploading}
                 uploadedFileUrl={uploadedFileUrl}
-                onFilesUpload={onFilesUpload}
+                onTemplateUpload={onTemplateUpload}
                 onSelectChangeTemplate={onSelectChangeTemplate}
               />
             )}
@@ -144,7 +144,7 @@ const Home = ({ user }) => {
           uploading={uploading}
           visible={showTemplatesPanel}
           loadTemplate={loadTemplate}
-          onFilesUpload={onFilesUpload}
+          onTemplateUpload={onTemplateUpload}
           hideTemplatesPanel={() => setShowTemplatesPanel(false)}
         />
         <div className="hidden sm:flex justify-end absolute bottom-0 right-0 group">

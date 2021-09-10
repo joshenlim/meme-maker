@@ -12,14 +12,10 @@ const DEFAULT_EXPIRY = 10 * 365 * 24 * 60 * 60
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-export const uploadFile = async (file, user) => {
-  const prefix = user
-    ? `users/${user.id}/${v4()}`
-    : `users/${v4()}`
+export const uploadFile = async (file, user, bucket) => {
+  const prefix = user ? `users/${user.id}/${v4()}` : `users/${v4()}`
   const fileOptions = { cacheControl: 3600 }
-  const { data } = await supabase.storage
-    .from(TEMPLATES_BUCKET)
-    .upload(prefix, file, fileOptions)
+  const { data } = await supabase.storage.from(bucket).upload(prefix, file, fileOptions)
   return data.Key
 }
 
@@ -35,9 +31,7 @@ export const getSignedUrl = async (bucket, prefix) => {
 }
 
 export const getStickers = async () => {
-  const { data } = await supabase
-    .from('stickers')
-    .select()
+  const { data } = await supabase.from('stickers').select()
   const res = await Promise.all(
     data.map(async (sticker) => {
       const signedUrl = await getSignedUrl(STICKERS_BUCKET, sticker.path)
@@ -47,11 +41,8 @@ export const getStickers = async () => {
   return res
 }
 
-export const getTemplates = async() => {
-  const { data } = await supabase
-    .from('templates')
-    .select()
-    .limit(DEFAULT_LIMIT)
+export const getTemplates = async () => {
+  const { data } = await supabase.from('templates').select().limit(DEFAULT_LIMIT)
   const res = await Promise.all(
     data.map(async (template) => {
       const signedUrl = await getSignedUrl(TEMPLATES_BUCKET, template.path)
@@ -62,9 +53,7 @@ export const getTemplates = async() => {
 }
 
 export const saveDefaultTemplate = async (name, json) => {
-  const { data, error } = await supabase
-    .from('templates')
-    .insert([{ name, json }])
+  const { data, error } = await supabase.from('templates').insert([{ name, json }])
   console.log('saveTemplate', data, error)
 }
 
@@ -74,16 +63,16 @@ export const saveUserTemplate = async (user, file, json, template) => {
   const { data: saveImageData, error: saveImageError } = await supabase.storage
     .from(MEMES_BUCKET)
     .upload(prefix, file, fileOptions)
-  
+
   const path = saveImageData.Key.split('/').slice(1).join('/')
-  const { data: saveRowData, error: saveDataError } = await supabase
-    .from('memes')
-    .insert([{
+  const { data: saveRowData, error: saveDataError } = await supabase.from('memes').insert([
+    {
       json,
       path,
       user_id: user.id,
-      template_id: R.pathOr(null, ['id'], template)
-    }])
+      template_id: R.pathOr(null, ['id'], template),
+    },
+  ])
 
   return saveRowData
 }
@@ -132,11 +121,9 @@ export const resignTemplateUrls = async (template) => {
   // At the moment since we don't allow editing of user memes
   // assumption is that we only resign template image urls
   const templateObjects = await Promise.all(
-    template.json.objects.map(async(object) => {
+    template.json.objects.map(async (object) => {
       if (R.hasPath(['src'], object)) {
-        const key = object.src
-          .split('/sign/')[1]
-          .split('?token')[0]
+        const key = object.src.split('/sign/')[1].split('?token')[0]
         const bucket = key.split('/')[0]
         const prefix = key.split('/').slice(1).join('/')
         const signedUrl = await getSignedUrl(bucket, prefix)
@@ -145,12 +132,12 @@ export const resignTemplateUrls = async (template) => {
       return object
     })
   )
-  return { 
+  return {
     ...template,
     json: {
       ...template.json,
-      objects: templateObjects 
-    }
+      objects: templateObjects,
+    },
   }
 }
 
